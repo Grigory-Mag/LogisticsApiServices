@@ -14,42 +14,21 @@ public class UserApiService : UserService.UserServiceBase
         this.dbContext = db;
     }
 
-    private CargoObject CargoToCargoObject(Cargo cargo)
-    {
-        return new CargoObject()
-        {
-            Id = cargo.Id,
-            Type = cargo.Type,
-            Constraints = cargo.Constraints,
-            Weight = cargo.Weight,
-            Volume = cargo.Volume,
-            Name = cargo.Name,
-            Price = cargo.Price,
-        };
-    }
-
-    private Cargo CargoObjectToCargo(CargoObject cargoObject)
-    {
-        return new Cargo()
-        {
-            Id = cargoObject.Id,
-            Type = cargoObject.Type,
-            Constraints = cargoObject.Constraints,
-            Weight = cargoObject.Weight,
-            Volume = cargoObject.Volume,
-            Name = cargoObject.Name,
-            Price = cargoObject.Price,
-        };
-    }
+    /*
+ * =*=*=*=*=*=*=*=*=*=*=*=*=*
+ * CRUD OPERATIONS FOR 
+ * --- CARGO TABLE ---
+ * =*=*=*=*=*=*=*=*=*=*=*=*=*
+ */
 
     public override async Task<CargoObject> GetCargo(GetOrDeleteCargoRequest request, ServerCallContext context)
     {
         var cargo = await dbContext.Cargos.FindAsync(request.Id);
         if (cargo == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Employee not found"));
-        var cargoObject = CargoToCargoObject(cargo);
+        var cargoObject = (CargoObject)cargo;
         return await Task.FromResult(cargoObject);
-
+        
         /* var user = new NewTestTable { StringData = request.Name, IntData = request.Age };
         await db.NewTestTables.AddAsync(user);
         await db.SaveChangesAsync();
@@ -71,13 +50,15 @@ public class UserApiService : UserService.UserServiceBase
             Weight = item.Volume
         }).ToList();
         listCargoObjects.Cargo.AddRange(cargos);
+        if (listCargoObjects.Cargo.Count == 0)
+            throw new RpcException(new Status(StatusCode.NotFound, "Cargo not found"));
         return await Task.FromResult(listCargoObjects);
     }
 
     public override async Task<CargoObject> CreateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
     {
         var cargoObject = request.Cargo;
-        var cargo = CargoObjectToCargo(cargoObject);
+        var cargo = (Cargo)cargoObject;
 
         await dbContext.Cargos.AddAsync(cargo);
         await dbContext.SaveChangesAsync();
@@ -116,11 +97,75 @@ public class UserApiService : UserService.UserServiceBase
             throw new RpcException(new Status(StatusCode.NotFound, "Cargo not found"));
         dbContext.Cargos.Remove(cargoDB);
         await dbContext.SaveChangesAsync();
-        var cargoObject = CargoToCargoObject(cargoDB);
+        var cargoObject = (CargoObject)cargoDB;
 
         return await Task.FromResult(cargoObject);
     }
 
+
+    /*
+ * =*=*=*=*=*=*=*=*=*=*=*=*=*
+ * CRUD OPERATIONS FOR 
+ * --- CARGO TYPES TABLE ---
+ * =*=*=*=*=*=*=*=*=*=*=*=*=*
+ */
+
+    public override async Task<CargoTypesObject> GetCargoType(GetOrDeleteCargoTypesRequest request, ServerCallContext context)
+    {
+        var cargoType = await dbContext.CargoTypes.FindAsync(request.Id);
+        var cargoTypeObject = (CargoTypesObject) cargoType;
+        if (cargoType == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "CargoType not found"));
+
+        return await Task.FromResult(cargoTypeObject);
+    }
+
+    public override async Task<ListCargoType> GetListCargoTypes(Empty request, ServerCallContext context)
+    {
+        var listCargoTypes = new ListCargoType();
+        var cargoTypes = dbContext.Cargos.Select(item => new CargoTypesObject
+        {
+            Id = item.Id,
+            Name = item.Name
+        }).ToList();
+        listCargoTypes.CargoType.AddRange(cargoTypes);
+        if (listCargoTypes.CargoType.Count == 0)
+            throw new RpcException(new Status(StatusCode.NotFound, "CargoTypes not found"));
+
+        return await Task.FromResult(listCargoTypes);
+    }
+
+    public override async Task<CargoTypesObject> CreateCargoType(CreateOrUpdateCargoTypesRequest request, ServerCallContext context)
+    {
+        var cargoTypeObject = request.CargoType;
+        var cargoTypeDB = (CargoType) cargoTypeObject;
+        await dbContext.CargoTypes.AddAsync(cargoTypeDB);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(cargoTypeObject);
+    }
+
+    public override async Task<CargoTypesObject> UpdateCargoType(CreateOrUpdateCargoTypesRequest request, ServerCallContext context)
+    {
+        var cargoTypeDB = await dbContext.CargoTypes.FindAsync(request.CargoType.Id);
+        if (cargoTypeDB == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "CargoType not found"));
+        cargoTypeDB = (CargoType) request.CargoType;
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(request.CargoType);
+    }
+
+    public override async Task<CargoTypesObject> DeleteCargoType(GetOrDeleteCargoTypesRequest request, ServerCallContext context)
+    {
+        var cargoTypeDB = await dbContext.CargoTypes.FindAsync(request.Id);
+        if (cargoTypeDB == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "CargoType not found"));
+        dbContext.CargoTypes.Remove(cargoTypeDB);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((CargoTypesObject)cargoTypeDB);
+    }
 
     /*DBContext db;
     public UserApiService(DBContext db)

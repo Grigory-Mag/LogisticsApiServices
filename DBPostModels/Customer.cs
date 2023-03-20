@@ -10,7 +10,7 @@ namespace GrpcGreeter.DBPostModels
         public int Cargo { get; set; }
         public int ColumnName { get; set; }
 
-        public virtual Cargo CargoNavigation { get; set; } = null!;
+        public virtual DBConverter CargoNavigation { get; set; } = null!;
         public virtual Requisite RequisiteNavigation { get; set; } = null!;
     }
 }
