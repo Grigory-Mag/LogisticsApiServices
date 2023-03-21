@@ -660,9 +660,34 @@ public class UserApiService : UserService.UserServiceBase
     /*
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 * CRUD OPERATIONS FOR 
-* --- REQUESTS TABLE ---
+* --- REQUISITE TABLE ---
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
+
+    public override Task<RequisitesObject> GetRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
+    {
+        return base.GetRequisite(request, context);
+    }
+
+    public override Task<ListRequisites> GetListRequisites(Empty request, ServerCallContext context)
+    {
+        return base.GetListRequisites(request, context);
+    }
+
+    public override Task<RequisitesObject> CreateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
+    {
+        return base.CreateRequisite(request, context);
+    }
+
+    public override Task<RequisitesObject> UpdateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
+    {
+        return base.UpdateRequisite(request, context);
+    }
+
+    public override Task<RequisitesObject> DeleteRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
+    {
+        return base.DeleteRequisite(request, context);
+    }
 
     /*DBContext db;
     public UserApiService(DBContext db)

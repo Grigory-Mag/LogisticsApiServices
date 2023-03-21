@@ -178,7 +178,18 @@ namespace ApiService
  
  public sealed partial class RequisitesObject
     {
-
+        public static explicit operator Requisite(RequisitesObject requisite)
+        {
+            return new Requisite()
+            {
+                Id = requisite.Id,
+                Inn = requisite.Inn,
+                Ceo = requisite.Ceo,
+                LegalAddress = requisite.LegalAddress,
+                Ownership = requisite.Ownership,
+                Pts = requisite.Pts,
+            };
+        }
     }
  
  public sealed partial class ListRequisites

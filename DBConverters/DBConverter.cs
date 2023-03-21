@@ -143,7 +143,18 @@ namespace LogisticsApiServices.DBPostModels
 
     public partial class Requisite
     {
-
+        public static explicit operator RequisitesObject(Requisite requisite)
+        {
+            return new RequisitesObject()
+            {
+                Id = requisite.Id,
+                Inn = requisite.Inn,
+                Ceo = requisite.Ceo,
+                LegalAddress = requisite.LegalAddress,
+                Ownership = requisite.Ownership,
+                Pts = requisite.Pts,
+            };
+        }
     }
 
     public partial class Transporter

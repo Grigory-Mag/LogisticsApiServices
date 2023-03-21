@@ -363,11 +363,11 @@ message CreateOrUpdateRequestObjRequest {
 
 message RequisitesObject{
 	int32 id = 1;
-	int32 ownership = 2;
+	google.protobuf.Int32Value ownership = 2;
 	string legal_address = 3;
 	string Inn = 4;
 	string ceo = 5;
-	int32 pts = 6;
+	google.protobuf.Int32Value pts = 6;
 }
 
 message GetOrDeleteRequisitesRequest{
