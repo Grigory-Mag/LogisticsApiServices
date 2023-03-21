@@ -89,7 +89,16 @@ namespace LogisticsApiServices.DBPostModels
 
     public partial class DriverLicence
     {
-
+        public static explicit operator DriverLicenceObject(DriverLicence driverLicence)
+        {
+            return new DriverLicenceObject()
+            {
+                Id=driverLicence.Id,
+                Series = driverLicence.Series,
+                Date = driverLicence.Date,
+                Number = driverLicence.Number,
+            };
+        }
     }
 
     public partial class Order
