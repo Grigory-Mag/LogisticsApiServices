@@ -169,7 +169,9 @@ namespace LogisticsApiServices.DBPostModels
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Date).HasColumnName("date");
+                entity.Property(e => e.Date)
+                    .HasColumnType("timestamp without time zone")
+                    .HasColumnName("date");
 
                 entity.Property(e => e.Number).HasColumnName("number");
 

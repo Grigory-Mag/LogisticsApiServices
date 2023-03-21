@@ -95,8 +95,8 @@ namespace LogisticsApiServices.DBPostModels
             {
                 Id=driverLicence.Id,
                 Series = driverLicence.Series,
-                Date = driverLicence.Date,
-                Number = driverLicence.Number,
+                Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(driverLicence.Date),
+                Number = driverLicence.Number
             };
         }
     }

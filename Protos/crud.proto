@@ -237,8 +237,8 @@ message CreateOrUpdateCustomersRequest {
 ///TODO
 message DriverLicenceObject {
 	int32 id = 1;
-	int32 series = 2;
-	int32 number = 3;
+	google.protobuf.Int32Value series = 2;
+	google.protobuf.Int32Value number = 3;
 	google.protobuf.Timestamp date = 4; // !!!!!!!!!!!
 }
 

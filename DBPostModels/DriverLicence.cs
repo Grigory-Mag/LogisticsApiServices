@@ -13,7 +13,7 @@ namespace LogisticsApiServices.DBPostModels
         public int Id { get; set; }
         public int? Series { get; set; }
         public int? Number { get; set; }
-        public DateOnly? Date { get; set; }
+        public DateTime Date { get; set; }
 
         public virtual ICollection<Driver> Drivers { get; set; }
     }

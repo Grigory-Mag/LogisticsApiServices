@@ -83,7 +83,16 @@ namespace ApiService
 
  public sealed partial class DriverLicenceObject
     {
-
+        public static explicit operator DriverLicence(DriverLicenceObject driverLicence)
+        {
+            return new DriverLicence()
+            {
+                Id = driverLicence.Id,
+                Series = driverLicence.Series,
+                Date = driverLicence.Date.ToDateTime(),
+                Number = driverLicence.Number,
+            };
+        }
     }
 
  public sealed partial class ListDriverLicence
