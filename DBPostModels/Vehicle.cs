@@ -13,14 +13,14 @@ namespace LogisticsApiServices.DBPostModels
         }
 
         public int Id { get; set; }
-        public int? Type { get; set; }
-        public string? Number { get; set; }
-        public int? Owner { get; set; }
-        public int? Driver { get; set; }
+        public int Type { get; set; }
+        public string Number { get; set; } = null!;
+        public int Owner { get; set; }
+        public int Driver { get; set; }
 
-        public virtual Driver? DriverNavigation { get; set; }
-        public virtual Ownership? OwnerNavigation { get; set; }
-        public virtual VehicleType? TypeNavigation { get; set; }
+        public virtual Driver DriverNavigation { get; set; } = null!;
+        public virtual Ownership OwnerNavigation { get; set; } = null!;
+        public virtual VehicleType TypeNavigation { get; set; } = null!;
         public virtual ICollection<Request> Requests { get; set; }
 
         public virtual ICollection<Transporter> Transporters { get; set; }

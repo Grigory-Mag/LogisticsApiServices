@@ -171,7 +171,17 @@ namespace LogisticsApiServices.DBPostModels
 
     public partial class Vehicle
     {
-
+        public static explicit operator VehiclesObject(Vehicle requisite)
+        {
+            return new VehiclesObject()
+            {
+                Id = requisite.Id,
+                Driver = requisite.Driver,
+                Number = requisite.Number,
+                Owner = requisite.Owner,
+                Type = requisite.Type,
+            };
+        }
     }
 
     public partial class VehicleType

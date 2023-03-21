@@ -302,16 +302,19 @@ namespace LogisticsApiServices.DBPostModels
                 entity.HasOne(d => d.DriverNavigation)
                     .WithMany(p => p.Vehicles)
                     .HasForeignKey(d => d.Driver)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Vehicles_Drivers_id_fk");
 
                 entity.HasOne(d => d.OwnerNavigation)
                     .WithMany(p => p.Vehicles)
                     .HasForeignKey(d => d.Owner)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Vehicles_Ownerships_id_fk");
 
                 entity.HasOne(d => d.TypeNavigation)
                     .WithMany(p => p.Vehicles)
                     .HasForeignKey(d => d.Type)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Vehicles_Vehicle_Types_id_fk");
 
                 entity.HasMany(d => d.Transporters)
