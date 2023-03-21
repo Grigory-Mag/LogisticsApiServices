@@ -24,7 +24,14 @@ namespace GrpcGreeter.DBPostModels
 
     public partial class CargoConstraint
     {
-
+        public static explicit operator CargoConstraintsObject (CargoConstraint cargoConstraint)
+        {
+            return new CargoConstraintsObject()
+            {
+                IdCargo = cargoConstraint.IdCargo,
+                IdConstraint = cargoConstraint.IdConstraint
+            };
+        }
     }
 
     public partial class CargoType

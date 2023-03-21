@@ -24,7 +24,14 @@ namespace ApiService
     }
  public sealed partial class CargoConstraintsObject
     {
-
+        public static explicit operator CargoConstraint(CargoConstraintsObject cargoConstraintObject)
+        {
+            return new CargoConstraint()
+            {
+                IdCargo = cargoConstraintObject.IdCargo,
+                IdConstraint = cargoConstraintObject.IdConstraint
+            };
+        }
     } 
 
  public sealed partial class CargoTypesObject
