@@ -8,8 +8,7 @@ namespace LogisticsApiServices.DBPostModels
         public Vehicle()
         {
             Requests = new HashSet<Request>();
-            Transporters = new HashSet<Transporter>();
-            TransportersNavigation = new HashSet<Transporter>();
+            IdTransporters = new HashSet<Transporter>();
         }
 
         public int Id { get; set; }
@@ -23,7 +22,6 @@ namespace LogisticsApiServices.DBPostModels
         public virtual VehicleType TypeNavigation { get; set; } = null!;
         public virtual ICollection<Request> Requests { get; set; }
 
-        public virtual ICollection<Transporter> Transporters { get; set; }
-        public virtual ICollection<Transporter> TransportersNavigation { get; set; }
+        public virtual ICollection<Transporter> IdTransporters { get; set; }
     }
 }

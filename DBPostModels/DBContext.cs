@@ -267,21 +267,21 @@ namespace LogisticsApiServices.DBPostModels
 
                 entity.Property(e => e.Name).HasColumnName("name");
 
-                entity.HasMany(d => d.VehiclesNavigation)
-                    .WithMany(p => p.TransportersNavigation)
+                entity.HasMany(d => d.IdVehicles)
+                    .WithMany(p => p.IdTransporters)
                     .UsingEntity<Dictionary<string, object>>(
-                        "VehiclesTransporter",
-                        l => l.HasOne<Vehicle>().WithMany().HasForeignKey("Vehicle").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Vehicles_Transporters_Vehicles_id_fk"),
-                        r => r.HasOne<Transporter>().WithMany().HasForeignKey("Transporter").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Vehicles_Transporters_Transporters_id_fk"),
+                        "TransportersVehicle",
+                        l => l.HasOne<Vehicle>().WithMany().HasForeignKey("IdVehicle").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Transporters_Vehicles_Vehicles_id_fk"),
+                        r => r.HasOne<Transporter>().WithMany().HasForeignKey("IdTransporter").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Transporters_Vehicles_Transporters_id_fk"),
                         j =>
                         {
-                            j.HasKey("Transporter", "Vehicle").HasName("Vehicles_Transporters_pk");
+                            j.HasKey("IdTransporter", "IdVehicle").HasName("Transporters_Vehicles_pk");
 
-                            j.ToTable("Vehicles_Transporters", "logistics_shema");
+                            j.ToTable("Transporters_Vehicles", "logistics_shema");
 
-                            j.IndexerProperty<int>("Transporter").HasColumnName("transporter");
+                            j.IndexerProperty<int>("IdTransporter").HasColumnName("id_transporter");
 
-                            j.IndexerProperty<int>("Vehicle").HasColumnName("vehicle");
+                            j.IndexerProperty<int>("IdVehicle").HasColumnName("id_vehicle");
                         });
             });
 
@@ -316,23 +316,6 @@ namespace LogisticsApiServices.DBPostModels
                     .HasForeignKey(d => d.Type)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Vehicles_Vehicle_Types_id_fk");
-
-                entity.HasMany(d => d.Transporters)
-                    .WithMany(p => p.Vehicles)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "TransportersVehicle",
-                        l => l.HasOne<Transporter>().WithMany().HasForeignKey("Transporter").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Transporters_Vehicles_Transporters_id_fk"),
-                        r => r.HasOne<Vehicle>().WithMany().HasForeignKey("Vehicle").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Transporters_Vehicles_Vehicles_id_fk"),
-                        j =>
-                        {
-                            j.HasKey("Vehicle", "Transporter").HasName("Transporters_Vehicles_pk");
-
-                            j.ToTable("Transporters_Vehicles", "logistics_shema");
-
-                            j.IndexerProperty<int>("Vehicle").HasColumnName("vehicle");
-
-                            j.IndexerProperty<int>("Transporter").HasColumnName("transporter");
-                        });
             });
 
             modelBuilder.Entity<VehicleType>(entity =>
