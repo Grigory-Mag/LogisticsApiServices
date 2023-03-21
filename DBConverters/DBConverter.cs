@@ -48,7 +48,14 @@ namespace GrpcGreeter.DBPostModels
 
     public partial class Constraint
     {
-
+        public static explicit operator ConstraintsObject(Constraint constraint)
+        {
+            return new ConstraintsObject()
+            {
+                Id = constraint.Id,
+                Desc = constraint.Desc
+            };
+        }
     }
 
     public partial class Customer

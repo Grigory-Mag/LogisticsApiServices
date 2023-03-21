@@ -48,7 +48,14 @@ namespace ApiService
 
  public sealed partial class ConstraintsObject
     {
-
+        public static explicit operator Constraint(ConstraintsObject constraint)
+        {
+            return new Constraint()
+            {
+                Id = constraint.Id,
+                Desc = constraint.Desc
+            };
+        }
     }
 
  public sealed partial class ListConstraints
