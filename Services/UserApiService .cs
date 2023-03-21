@@ -664,30 +664,65 @@ public class UserApiService : UserService.UserServiceBase
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
-    public override Task<RequisitesObject> GetRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
+    public override async Task<RequisitesObject> GetRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
     {
-        return base.GetRequisite(request, context);
+        var item = await dbContext.Requisites.FindAsync(request.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Requisite not found"));
+
+        return await Task.FromResult((RequisitesObject)item);
     }
 
-    public override Task<ListRequisites> GetListRequisites(Empty request, ServerCallContext context)
+    public override async Task<ListRequisites> GetListRequisites(Empty request, ServerCallContext context)
     {
-        return base.GetListRequisites(request, context);
+        var listItems = new ListRequisites();
+        var items = dbContext.Requisites.Select(item =>
+            new RequisitesObject((RequisitesObject)item)
+        ).ToList();
+        listItems.Requisites.AddRange(items);
+        if (listItems.Requisites.Count == 0)
+            throw new RpcException(new Status(StatusCode.NotFound, "Requisite not found"));
+
+        return await Task.FromResult(listItems);
     }
 
-    public override Task<RequisitesObject> CreateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
+    public override async Task<RequisitesObject> CreateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
     {
-        return base.CreateRequisite(request, context);
+        var item = (Requisite)request.Requisite;
+        await dbContext.Requisites.AddAsync(item);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((RequisitesObject)item);
     }
 
-    public override Task<RequisitesObject> UpdateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
+    public override async Task<RequisitesObject> UpdateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
     {
-        return base.UpdateRequisite(request, context);
+        var item = await dbContext.Requisites.FindAsync(request.Requisite.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Requisite not found"));
+        item = (Requisite)request.Requisite;
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(request.Requisite);
     }
 
-    public override Task<RequisitesObject> DeleteRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
+    public override async Task<RequisitesObject> DeleteRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
     {
-        return base.DeleteRequisite(request, context);
+        var item = await dbContext.Requisites.FindAsync(request.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Requisite not found"));
+        dbContext.Requisites.Remove(item);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((RequisitesObject)item);
     }
+
+    /*
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+* CRUD OPERATIONS FOR 
+* --- REQUISITE TABLE ---
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+*/
 
     /*DBContext db;
     public UserApiService(DBContext db)

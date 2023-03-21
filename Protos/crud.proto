@@ -375,11 +375,11 @@ message GetOrDeleteRequisitesRequest{
 }
 
 message ListRequisites{
-	repeated RequestsObject Requisites = 1;
+	repeated RequisitesObject Requisites = 1;
 }
 
 message CreateOrUpdateRequisitesRequest {
-	RequestsObject Requisite = 1;
+	RequisitesObject Requisite = 1;
 } 
 
 /* * * * * * * * * * * * * *
