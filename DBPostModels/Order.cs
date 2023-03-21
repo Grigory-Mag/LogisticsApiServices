@@ -11,7 +11,7 @@ namespace LogisticsApiServices.DBPostModels
         }
 
         public int Id { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
         public int? Cargo { get; set; }
 
         public virtual Cargo? CargoNavigation { get; set; }

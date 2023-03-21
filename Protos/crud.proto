@@ -292,7 +292,7 @@ message CreateOrUpdateDriversRequest {
 message OrdersObject {
 	int32 id = 1;
 	google.protobuf.Timestamp date = 2;
-	int32 cargo = 3;
+	google.protobuf.Int32Value cargo = 3;
 }
 
 message GetOrDeleteOrdersRequest{

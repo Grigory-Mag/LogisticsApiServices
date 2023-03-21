@@ -123,7 +123,15 @@ namespace ApiService
  
  public sealed partial class OrdersObject
     {
-
+        public static explicit operator Order(OrdersObject order)
+        {
+            return new Order()
+            {
+                Id = order.Id,
+                Cargo = order.Cargo,
+                Date = order.Date.ToDateTime(),
+            };
+        }
     }
  
  public sealed partial class ListOrders

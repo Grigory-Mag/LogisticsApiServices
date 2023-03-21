@@ -103,7 +103,15 @@ namespace LogisticsApiServices.DBPostModels
 
     public partial class Order
     {
-
+        public static explicit operator OrdersObject(Order order)
+        {
+            return new OrdersObject()
+            {
+                Id = order.Id,
+                Cargo = order.Cargo,
+                Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(order.Date),
+            };
+        }
     }
 
     public partial class Ownership

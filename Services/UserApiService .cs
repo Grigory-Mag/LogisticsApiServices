@@ -484,12 +484,34 @@ public class UserApiService : UserService.UserServiceBase
 * --- ORDERS TABLE ---
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
-    public override Task<OrdersObject> GetOrder(GetOrDeleteOrdersRequest request, ServerCallContext context)
+    public override async Task<OrdersObject> GetOrder(GetOrDeleteOrdersRequest request, ServerCallContext context)
     {
-        return base.GetOrder(request, context);
+        var orders = await dbContext.Orders.FindAsync(request.Id);
+        if (orders == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Order not found"));
+
+        return await Task.FromResult((OrdersObject)orders);
     }
 
+    public override Task<ListOrders> GetListOrders(Empty request, ServerCallContext context)
+    {
+        return base.GetListOrders(request, context);
+    }
 
+    public override Task<OrdersObject> CreateOrder(CreateOrUpdateOrdersRequest request, ServerCallContext context)
+    {
+        return base.CreateOrder(request, context);
+    }
+
+    public override Task<OrdersObject> UpdateOrder(CreateOrUpdateOrdersRequest request, ServerCallContext context)
+    {
+        return base.UpdateOrder(request, context);
+    }
+
+    public override Task<OrdersObject> DeleteOrder(GetOrDeleteOrdersRequest request, ServerCallContext context)
+    {
+        return base.DeleteOrder(request, context);
+    }
 
     /*DBContext db;
     public UserApiService(DBContext db)
