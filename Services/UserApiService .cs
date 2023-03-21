@@ -493,25 +493,56 @@ public class UserApiService : UserService.UserServiceBase
         return await Task.FromResult((OrdersObject)orders);
     }
 
-    public override Task<ListOrders> GetListOrders(Empty request, ServerCallContext context)
+    public override async Task<ListOrders> GetListOrders(Empty request, ServerCallContext context)
     {
-        return base.GetListOrders(request, context);
+        var listOrders = new ListOrders();
+        var orders = dbContext.Orders.Select(item =>
+            new OrdersObject((OrdersObject)item)
+        ).ToList();
+        listOrders.Orders.AddRange(orders);
+        if (listOrders.Orders.Count == 0)
+            throw new RpcException(new Status(StatusCode.NotFound, "DriverLicences not found"));
+
+        return await Task.FromResult(listOrders);
     }
 
-    public override Task<OrdersObject> CreateOrder(CreateOrUpdateOrdersRequest request, ServerCallContext context)
+    public override async Task<OrdersObject> CreateOrder(CreateOrUpdateOrdersRequest request, ServerCallContext context)
     {
-        return base.CreateOrder(request, context);
+        var order = (Order)request.Order;
+        await dbContext.Orders.AddAsync(order);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((OrdersObject)order);
     }
 
-    public override Task<OrdersObject> UpdateOrder(CreateOrUpdateOrdersRequest request, ServerCallContext context)
+    public override async Task<OrdersObject> UpdateOrder(CreateOrUpdateOrdersRequest request, ServerCallContext context)
     {
-        return base.UpdateOrder(request, context);
+        var order = await dbContext.Orders.FindAsync(request.Order.Id);
+        if (order == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Order not found"));
+        order = (Order)request.Order;
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(request.Order);
     }
 
-    public override Task<OrdersObject> DeleteOrder(GetOrDeleteOrdersRequest request, ServerCallContext context)
+    public override async Task<OrdersObject> DeleteOrder(GetOrDeleteOrdersRequest request, ServerCallContext context)
     {
-        return base.DeleteOrder(request, context);
+        var order = await dbContext.Orders.FindAsync(request.Id);
+        if (order == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Order not found"));
+        dbContext.Orders.Remove(order);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((OrdersObject)order);
     }
+
+    /*
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+* CRUD OPERATIONS FOR 
+* --- ORDERS TABLE ---
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+*/
 
     /*DBContext db;
     public UserApiService(DBContext db)
