@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class Order
     {
@@ -13,7 +13,6 @@ namespace GrpcGreeter.DBPostModels
         public int Id { get; set; }
         public DateTime? Date { get; set; }
         public int? Cargo { get; set; }
-        public int ColumnName { get; set; }
 
         public virtual Cargo? CargoNavigation { get; set; }
         public virtual ICollection<Request> Requests { get; set; }

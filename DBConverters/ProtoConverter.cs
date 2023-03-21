@@ -1,4 +1,4 @@
-﻿using GrpcGreeter.DBPostModels;
+﻿using LogisticsApiServices.DBPostModels;
 
 namespace ApiService
 {

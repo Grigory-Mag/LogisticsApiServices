@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class Requisite
     {
@@ -16,7 +16,6 @@ namespace GrpcGreeter.DBPostModels
         public string? Inn { get; set; }
         public string? Ceo { get; set; }
         public int? Pts { get; set; }
-        public int ColumnName { get; set; }
 
         public virtual Ownership? OwnershipNavigation { get; set; }
         public virtual ICollection<Customer> Customers { get; set; }

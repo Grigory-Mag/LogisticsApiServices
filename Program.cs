@@ -3,7 +3,7 @@ using ApiService;
 //using CrudGrpcApp.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using GrpcGreeter.DBPostModels;
+using LogisticsApiServices.DBPostModels;
 
 var builder = WebApplication.CreateBuilder(args);
 

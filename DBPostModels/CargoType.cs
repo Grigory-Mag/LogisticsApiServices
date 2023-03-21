@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class CargoType
     {
@@ -12,7 +12,6 @@ namespace GrpcGreeter.DBPostModels
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int ColumnName { get; set; }
 
         public virtual ICollection<Cargo> Cargos { get; set; }
     }

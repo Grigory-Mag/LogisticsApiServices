@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class Transporter
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class Driver
     {
@@ -12,13 +12,12 @@ namespace GrpcGreeter.DBPostModels
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int Surname { get; set; }
+        public string Surname { get; set; } = null!;
         public string? Patronymic { get; set; }
         public bool Sanitation { get; set; }
-        public int? Licence { get; set; }
-        public int ColumnName { get; set; }
+        public int Licence { get; set; }
 
-        public virtual DriverLicence? LicenceNavigation { get; set; }
+        public virtual DriverLicence LicenceNavigation { get; set; } = null!;
         public virtual ICollection<Vehicle> Vehicles { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class DBContext : DbContext
     {
@@ -95,13 +95,11 @@ namespace GrpcGreeter.DBPostModels
 
             modelBuilder.Entity<CargoType>(entity =>
             {
-                entity.ToTable("Cargo_types", "logistics_shema");
+                entity.ToTable("Cargo_Types", "logistics_shema");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("nextval('logistics_shema.\"Cargo_types_id_seq\"'::regclass)");
 
                 entity.Property(e => e.Name).HasColumnName("name");
             });
@@ -114,10 +112,6 @@ namespace GrpcGreeter.DBPostModels
                     .ValueGeneratedNever()
                     .HasColumnName("id");
 
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
-
                 entity.Property(e => e.Desc).HasColumnName("desc");
             });
 
@@ -128,10 +122,6 @@ namespace GrpcGreeter.DBPostModels
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Cargo).HasColumnName("cargo");
-
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
 
                 entity.Property(e => e.Requisite).HasColumnName("requisite");
 
@@ -156,10 +146,6 @@ namespace GrpcGreeter.DBPostModels
                     .HasColumnName("id")
                     .HasDefaultValueSql("nextval('logistics_shema.\"Drivers_Id_seq\"'::regclass)");
 
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
-
                 entity.Property(e => e.Licence).HasColumnName("licence");
 
                 entity.Property(e => e.Name).HasColumnName("name");
@@ -173,6 +159,7 @@ namespace GrpcGreeter.DBPostModels
                 entity.HasOne(d => d.LicenceNavigation)
                     .WithMany(p => p.Drivers)
                     .HasForeignKey(d => d.Licence)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Drivers_Driver_Licence_id_fk");
             });
 
@@ -181,10 +168,6 @@ namespace GrpcGreeter.DBPostModels
                 entity.ToTable("Driver_Licence", "logistics_shema");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
 
                 entity.Property(e => e.Date).HasColumnName("date");
 
@@ -200,10 +183,6 @@ namespace GrpcGreeter.DBPostModels
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Cargo).HasColumnName("cargo");
-
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
 
                 entity.Property(e => e.Date)
                     .HasColumnType("timestamp without time zone")
@@ -222,10 +201,6 @@ namespace GrpcGreeter.DBPostModels
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasDefaultValueSql("nextval('logistics_shema.\"Ownerships_Id_seq\"'::regclass)");
-
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
 
                 entity.Property(e => e.Name).HasColumnName("name");
             });
@@ -264,10 +239,6 @@ namespace GrpcGreeter.DBPostModels
                     .HasDefaultValueSql("nextval('logistics_shema.\"Requisites_Id_seq\"'::regclass)");
 
                 entity.Property(e => e.Ceo).HasColumnName("ceo");
-
-                entity.Property(e => e.ColumnName)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("column_name");
 
                 entity.Property(e => e.Inn).HasMaxLength(12);
 

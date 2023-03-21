@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class Cargo
     {
@@ -73,7 +73,18 @@ namespace GrpcGreeter.DBPostModels
 
     public partial class Driver
     {
-
+        public static explicit operator DriversObject(Driver driver)
+        {
+            return new DriversObject()
+            {
+                Id = driver.Id,
+                Name = driver.Name,
+                Licence = driver.Licence,
+                Patronymic = driver.Patronymic,
+                Sanitation = driver.Sanitation,
+                Surname = driver.Surname
+            };
+        }
     }
 
     public partial class DriverLicence

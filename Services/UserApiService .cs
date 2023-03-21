@@ -3,7 +3,7 @@ using Grpc.Core;
 using GrpcGreeter;
 using ApiService;
 using Task = System.Threading.Tasks.Task;
-using GrpcGreeter.DBPostModels;
+using LogisticsApiServices.DBPostModels;
 
 namespace ApiService;
 public class UserApiService : UserService.UserServiceBase

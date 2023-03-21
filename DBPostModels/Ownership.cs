@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GrpcGreeter.DBPostModels
+namespace LogisticsApiServices.DBPostModels
 {
     public partial class Ownership
     {
@@ -13,7 +13,6 @@ namespace GrpcGreeter.DBPostModels
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int ColumnName { get; set; }
 
         public virtual ICollection<Requisite> Requisites { get; set; }
         public virtual ICollection<Vehicle> Vehicles { get; set; }
