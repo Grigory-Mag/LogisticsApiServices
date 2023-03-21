@@ -60,7 +60,15 @@ namespace GrpcGreeter.DBPostModels
 
     public partial class Customer
     {
-
+        public static explicit operator CustomersObject(Customer customer)
+        {
+            return new CustomersObject()
+            {
+                Id = customer.Id,
+                Cargo = customer.Cargo,
+                Requisite = customer.Requisite
+            };
+        }
     }
 
     public partial class Driver

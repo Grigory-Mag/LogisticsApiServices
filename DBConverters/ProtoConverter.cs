@@ -65,7 +65,15 @@ namespace ApiService
 
  public sealed partial class CustomersObject
     {
-
+        public static explicit operator Customer(CustomersObject customer)
+        {
+            return new Customer()
+            {
+                Id = customer.Id,
+                Cargo = customer.Cargo,
+                Requisite = customer.Requisite
+            };
+        }
     }
 
  public sealed partial class ListCustomers

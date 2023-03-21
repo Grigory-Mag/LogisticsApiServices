@@ -177,9 +177,9 @@ public class UserApiService : UserService.UserServiceBase
     public override async Task<CargoTypesObject> GetCargoType(GetOrDeleteCargoTypesRequest request, ServerCallContext context)
     {
         var cargoType = await dbContext.CargoTypes.FindAsync(request.Id);
-        var cargoTypeObject = (CargoTypesObject) cargoType;
         if (cargoType == null)
             throw new RpcException(new Status(StatusCode.NotFound, "CargoType not found"));
+        var cargoTypeObject = (CargoTypesObject) cargoType;
 
         return await Task.FromResult(cargoTypeObject);
     }
@@ -241,9 +241,9 @@ public class UserApiService : UserService.UserServiceBase
     public override async Task<ConstraintsObject> GetConstraint(GetOrDeleteConstraintsRequest request, ServerCallContext context)
     {
         var constraint = await dbContext.Constraints.FindAsync(request.Id);
-        var constraintObject = (ConstraintsObject)constraint;
         if (constraint == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Constraint not found"));
+        var constraintObject = (ConstraintsObject)constraint;
 
         return await Task.FromResult(constraintObject);
     }
@@ -298,11 +298,49 @@ public class UserApiService : UserService.UserServiceBase
     /*
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 * CRUD OPERATIONS FOR 
-* --- CARGO CONSTRAINTS TABLE ---
+* --- CUSTOMERS TABLE ---
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
-    
-    
+
+    public override async Task<CustomersObject> GetCustomer(GetOrDeleteCustomersRequest request, ServerCallContext context)
+    {
+        var customer = await dbContext.Customers.FindAsync(request.Id);
+        if (customer == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Constraint not found"));
+
+        return await Task.FromResult((CustomersObject) customer);
+    }
+
+    public override async Task<ListCustomers> GetListCustomers(Empty request, ServerCallContext context)
+    {
+        var listCustomers = new ListCustomers();
+        var customers = dbContext.Customers.Select(item => new CustomersObject
+        {
+            Id = item.Id,
+            Cargo = item.Cargo,
+            Requisite = item.Requisite
+        }).ToList();
+        listCustomers.Customers.AddRange(customers);
+        if (listCustomers.Customers.Count == 0)
+            throw new RpcException(new Status(StatusCode.NotFound, "Customers not found"));
+
+        return await Task.FromResult(listCustomers);
+    }
+
+    public override Task<CustomersObject> CreateCustomer(CreateOrUpdateCustomersRequest request, ServerCallContext context)
+    {
+        return base.CreateCustomer(request, context);
+    }
+
+    public override Task<CustomersObject> UpdateCustomer(CreateOrUpdateCustomersRequest request, ServerCallContext context)
+    {
+        return base.UpdateCustomer(request, context);
+    }
+
+    public override Task<CustomersObject> DeleteCustomer(GetOrDeleteCustomersRequest request, ServerCallContext context)
+    {
+        return base.DeleteCustomer(request, context);
+    }
 
     /*DBContext db;
     public UserApiService(DBContext db)

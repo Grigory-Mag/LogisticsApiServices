@@ -40,7 +40,7 @@ service UserService{
   rpc DeleteConstraint (GetOrDeleteConstraintsRequest) returns (ConstraintsObject);
   /* CUSTOMERS */
   rpc GetCustomer (GetOrDeleteCustomersRequest) returns (CustomersObject);
-  rpc GetListCustomers (google.protobuf.Empty) returns (CustomersObject);
+  rpc GetListCustomers (google.protobuf.Empty) returns (ListCustomers);
   rpc CreateCustomer (CreateOrUpdateCustomersRequest) returns (CustomersObject);
   rpc UpdateCustomer (CreateOrUpdateCustomersRequest) returns (CustomersObject);
   rpc DeleteCustomer (GetOrDeleteCustomersRequest) returns (CustomersObject);
