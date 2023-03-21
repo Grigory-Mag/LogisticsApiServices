@@ -128,7 +128,17 @@ namespace LogisticsApiServices.DBPostModels
 
     public partial class Request
     {
-
+        public static explicit operator RequestsObject(Request request)
+        {
+            return new RequestsObject()
+            {
+                Id = request.Id,
+                Conditions = request.Conditions,
+                Order = request.Order,
+                Price = request.Price,
+                Vehicle = request.Vehicle,
+            };
+        }
     }
 
     public partial class Requisite

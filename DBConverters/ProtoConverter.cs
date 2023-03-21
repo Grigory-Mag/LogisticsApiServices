@@ -158,7 +158,17 @@ namespace ApiService
  
  public sealed partial class RequestsObject
     {
-
+        public static explicit operator Request(RequestsObject request)
+        {
+            return new Request()
+            {
+                Id = request.Id,
+                Conditions = request.Conditions,
+                Order = request.Order,
+                Price = request.Price,
+                Vehicle = request.Vehicle,
+            };
+        }
     }
  
  public sealed partial class ListRequest
