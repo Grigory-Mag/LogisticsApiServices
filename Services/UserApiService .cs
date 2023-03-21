@@ -327,20 +327,45 @@ public class UserApiService : UserService.UserServiceBase
         return await Task.FromResult(listCustomers);
     }
 
-    public override Task<CustomersObject> CreateCustomer(CreateOrUpdateCustomersRequest request, ServerCallContext context)
-    {
-        return base.CreateCustomer(request, context);
+    public override async Task<CustomersObject> CreateCustomer(CreateOrUpdateCustomersRequest request, ServerCallContext context)
+    { 
+        var customer = (Customer)request.Customer;
+        await dbContext.Customers.AddAsync(customer);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((CustomersObject)customer);
     }
 
-    public override Task<CustomersObject> UpdateCustomer(CreateOrUpdateCustomersRequest request, ServerCallContext context)
+    public override async Task<CustomersObject> UpdateCustomer(CreateOrUpdateCustomersRequest request, ServerCallContext context)
     {
-        return base.UpdateCustomer(request, context);
+        var customer = await dbContext.Customers.FindAsync(request.Customer.Id);
+        if (customer == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Customer not found"));
+        customer = (Customer)request.Customer;
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(request.Customer);
     }
 
-    public override Task<CustomersObject> DeleteCustomer(GetOrDeleteCustomersRequest request, ServerCallContext context)
+    public override async Task<CustomersObject> DeleteCustomer(GetOrDeleteCustomersRequest request, ServerCallContext context)
     {
-        return base.DeleteCustomer(request, context);
+        var customer = await dbContext.Customers.FindAsync(request.Id);
+        if (customer == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Customer not found"));
+        dbContext.Customers.Remove(customer);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((CustomersObject)customer);
     }
+
+    /*
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+* CRUD OPERATIONS FOR 
+* --- CUSTOMERS TABLE ---
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+*/
+
+
 
     /*DBContext db;
     public UserApiService(DBContext db)
