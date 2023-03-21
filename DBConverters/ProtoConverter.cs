@@ -141,7 +141,14 @@ namespace ApiService
  
  public sealed partial class OwnershipsObject
     {
-
+        public static explicit operator Ownership(OwnershipsObject ownership)
+        {
+            return new Ownership()
+            {
+                Id = ownership.Id,
+                Name = ownership.Name,
+            };
+        }
     }
  
  public sealed partial class ListOwnerships

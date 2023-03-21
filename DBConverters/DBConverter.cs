@@ -116,7 +116,14 @@ namespace LogisticsApiServices.DBPostModels
 
     public partial class Ownership
     {
-
+        public static explicit operator OwnershipsObject(Ownership ownership)
+        {
+            return new OwnershipsObject()
+            {
+                Id = ownership.Id,
+                Name = ownership.Name,
+            };
+        }
     }
 
     public partial class Request

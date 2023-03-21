@@ -540,9 +540,38 @@ public class UserApiService : UserService.UserServiceBase
     /*
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 * CRUD OPERATIONS FOR 
-* --- ORDERS TABLE ---
+* --- OWNERSHIP TABLE ---
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
+
+    public override async Task<OwnershipsObject> GetOwnership(GetOrDeleteOwnershipsRequest request, ServerCallContext context)
+    {
+        var ownership = await dbContext.Ownerships.FindAsync(request.Id);
+        if (ownership == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Ownership not found"));
+
+        return await Task.FromResult((OwnershipsObject)ownership);
+    }
+
+    public override Task<ListOwnerships> GetListOwnerships(Empty request, ServerCallContext context)
+    {
+        return base.GetListOwnerships(request, context);
+    }
+
+    public override Task<OwnershipsObject> CreateOwnership(CreateOrUpdateOwnershipsRequest request, ServerCallContext context)
+    {
+        return base.CreateOwnership(request, context);
+    }
+
+    public override Task<OwnershipsObject> UpdateOwnership(CreateOrUpdateOwnershipsRequest request, ServerCallContext context)
+    {
+        return base.UpdateOwnership(request, context);
+    }
+
+    public override Task<OwnershipsObject> DeleteOwnership(GetOrDeleteOwnershipsRequest request, ServerCallContext context)
+    {
+        return base.DeleteOwnership(request, context);
+    }
 
     /*DBContext db;
     public UserApiService(DBContext db)
