@@ -484,6 +484,11 @@ public class UserApiService : UserService.UserServiceBase
 * --- ORDERS TABLE ---
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
+    public override Task<OrdersObject> GetOrder(GetOrDeleteOrdersRequest request, ServerCallContext context)
+    {
+        return base.GetOrder(request, context);
+    }
+
 
 
     /*DBContext db;
