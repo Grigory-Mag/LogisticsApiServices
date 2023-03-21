@@ -93,7 +93,18 @@ namespace ApiService
 
  public sealed partial class DriversObject
     {
-
+        public static explicit operator Driver(DriversObject driver)
+        {
+            return new Driver()
+            {
+                Id = driver.Id,
+                Name = driver.Name,
+                Licence = driver.Licence,
+                Patronymic = driver.Patronymic,
+                Sanitation = driver.Sanitation,
+                Surname = driver.Surname
+            };
+        }
     }
 
  public sealed partial class ListDrivers
