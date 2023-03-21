@@ -199,7 +199,14 @@ namespace ApiService
  
  public sealed partial class TransportersObject
     {
-
+        public static explicit operator Transporter(TransportersObject requisite)
+        {
+            return new Transporter()
+            {
+                Id = requisite.Id,
+                Name = requisite.Name
+            };
+        }
     }
  
  public sealed partial class ListTransporters

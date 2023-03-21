@@ -12,7 +12,7 @@ namespace LogisticsApiServices.DBPostModels
         }
 
         public int Id { get; set; }
-        public int? Name { get; set; }
+        public string? Name { get; set; }
 
         public virtual ICollection<Vehicle> Vehicles { get; set; }
         public virtual ICollection<Vehicle> VehiclesNavigation { get; set; }
