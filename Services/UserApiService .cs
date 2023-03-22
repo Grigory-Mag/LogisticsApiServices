@@ -854,24 +854,48 @@ public class UserApiService : UserService.UserServiceBase
         return await Task.FromResult((VehiclesTypesObject)item);
     }
 
-    public override Task<ListVehiclesTypes> GetListVehiclesTypes(Empty request, ServerCallContext context)
+    public override async Task<ListVehiclesTypes> GetListVehiclesTypes(Empty request, ServerCallContext context)
     {
-        return base.GetListVehiclesTypes(request, context);
+        var listItems = new ListVehiclesTypes();
+        var items = dbContext.VehicleTypes.Select(item =>
+            new VehiclesTypesObject((VehiclesTypesObject)item)
+        ).ToList();
+        listItems.VehiclesTypes.AddRange(items);
+        if (listItems.VehiclesTypes.Count == 0)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicles Types not found"));
+
+        return await Task.FromResult(listItems);
     }
 
-    public override Task<VehiclesTypesObject> CreateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
+    public override async Task<VehiclesTypesObject> CreateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
     {
-        return base.CreateVehiclesType(request, context);
+        var item = (VehicleType)request.VehiclesTypes;
+        await dbContext.VehicleTypes.AddAsync(item);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((VehiclesTypesObject)item);
     }
 
-    public override Task<VehiclesTypesObject> UpdateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
+    public override async Task<VehiclesTypesObject> UpdateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
     {
-        return base.UpdateVehiclesType(request, context);
+        var item = await dbContext.VehicleTypes.FindAsync(request.VehiclesTypes.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Type not found"));
+        item = (VehicleType)request.VehiclesTypes;
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(request.VehiclesTypes);
     }
 
-    public override Task<VehiclesTypesObject> DeleteVehiclesType(GetOrDeleteVehiclesTypesRequest request, ServerCallContext context)
+    public override async Task<VehiclesTypesObject> DeleteVehiclesType(GetOrDeleteVehiclesTypesRequest request, ServerCallContext context)
     {
-        return base.DeleteVehiclesType(request, context);
+        var item = await dbContext.VehicleTypes.FindAsync(request.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Type not found"));
+        dbContext.VehicleTypes.Remove(item);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((VehiclesTypesObject)item);
     }
 
     /*

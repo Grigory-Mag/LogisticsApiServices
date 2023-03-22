@@ -437,7 +437,6 @@ message CreateOrUpdateTransportersVehiclesRequest{
 message VehiclesTypesObject{
 	int32 id = 1;
 	string name = 2;
-	ListVehicles vehicles = 3;
 }
 
 message GetOrDeleteVehiclesTypesRequest {
