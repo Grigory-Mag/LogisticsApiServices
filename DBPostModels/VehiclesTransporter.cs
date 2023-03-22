@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LogisticsApiServices.DBPostModels
 {
-    public partial class TransportersVehicle
+    public partial class VehiclesTransporter
     {
         public int IdTransporter { get; set; }
         public int IdVehicle { get; set; }

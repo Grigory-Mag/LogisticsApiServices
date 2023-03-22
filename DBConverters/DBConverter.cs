@@ -210,4 +210,17 @@ namespace LogisticsApiServices.DBPostModels
             };
         }
     }
+
+    public partial class VehiclesTransporter
+    {
+        public static explicit operator VehiclesTransportersObject(VehiclesTransporter item)
+        {
+            return new VehiclesTransportersObject()
+            {
+                Transporter = item.IdTransporter,
+                Vehicle = item.IdVehicle,
+            };
+        }
+    }
+
 }

@@ -263,7 +263,14 @@ namespace ApiService
  
  public sealed partial class VehiclesTransportersObject
     {
-
+        public static explicit operator VehiclesTransporter(VehiclesTransportersObject item)
+        {
+            return new VehiclesTransporter()
+            {
+                IdTransporter = item.Transporter,
+                IdVehicle = item.Vehicle,
+            };
+        }
     }
  
  public sealed partial class ListVehiclesTransporters
