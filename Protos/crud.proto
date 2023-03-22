@@ -87,11 +87,12 @@ service UserService{
   rpc UpdateTransporter (CreateOrUpdateTransportersRequest) returns (TransportersObject);
   rpc DeleteTransporter (GetOrDeleteTransportersRequest) returns (TransportersObject);
   /* TRANSPORTERS_VEHICLES */
+  /*
   rpc GetTransportersVehicle (GetOrDeleteTransportersVehiclesRequest) returns (TransportersVehiclesObject);
   rpc GetListTransportersVehicles (google.protobuf.Empty) returns (ListTransportersVehicles);
   rpc CreateTransportersVehicle (CreateOrUpdateTransportersVehiclesRequest) returns (TransportersVehiclesObject);
   rpc UpdateTransportersVehicle (CreateOrUpdateTransportersVehiclesRequest) returns (TransportersVehiclesObject);
-  rpc DeleteTransportersVehicle (GetOrDeleteTransportersVehiclesRequest) returns (TransportersVehiclesObject);
+  rpc DeleteTransportersVehicle (GetOrDeleteTransportersVehiclesRequest) returns (TransportersVehiclesObject);*/
   /* VEHICLES_TYPES */
   rpc GetVehiclesType (GetOrDeleteVehiclesTypesRequest) returns (VehiclesTypesObject);
   rpc GetListVehiclesTypes (google.protobuf.Empty) returns (ListVehiclesTypes);

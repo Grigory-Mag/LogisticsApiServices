@@ -905,30 +905,60 @@ public class UserApiService : UserService.UserServiceBase
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
-    public override Task<TransportersVehiclesObject> GetTransportersVehicle(GetOrDeleteTransportersVehiclesRequest request, ServerCallContext context)
+    public override async Task<VehiclesTransportersObject> GetVehiclesTransporter(GetOrDeleteVehiclesTransportersRequest request, ServerCallContext context)
     {
+        var item = await dbContext.VehiclesTransporters.FindAsync(request.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicles Transporters not found"));
 
-        return base.GetTransportersVehicle(request, context);
+        return await Task.FromResult((VehiclesTransportersObject)item);
+
     }
 
-    public override Task<ListTransportersVehicles> GetListTransportersVehicles(Empty request, ServerCallContext context)
+    public override async Task<ListVehiclesTransporters> GetListVehiclesTransporter(Empty request, ServerCallContext context)
     {
-        return base.GetListTransportersVehicles(request, context);
+        var listItems = new ListVehiclesTransporters();
+        var items = dbContext.VehiclesTransporters.Select(item =>
+            new VehiclesTransportersObject((VehiclesTransportersObject)item)
+        ).ToList();
+        listItems.VehicleTransporters.AddRange(items);
+        if (listItems.VehicleTransporters.Count == 0)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicles Transporters not found"));
+
+        return await Task.FromResult(listItems);
     }
 
-    public override Task<TransportersVehiclesObject> CreateTransportersVehicle(CreateOrUpdateTransportersVehiclesRequest request, ServerCallContext context)
+    public override async Task<VehiclesTransportersObject> CreateVehiclesTransporter(CreateOrUpdateVehiclesTransportersRequest request, ServerCallContext context)
     {
-        return base.CreateTransportersVehicle(request, context);
+        var item = await dbContext.VehiclesTransporters.FindAsync(request.VehicleTransporters.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Transporters not found"));
+        item = (VehiclesTransporter)request.VehicleTransporters;
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(request.VehicleTransporters);
     }
 
-    public override Task<TransportersVehiclesObject> UpdateTransportersVehicle(CreateOrUpdateTransportersVehiclesRequest request, ServerCallContext context)
+    public override async Task<VehiclesTransportersObject> UpdateVehiclesTransporter(CreateOrUpdateVehiclesTransportersRequest request, ServerCallContext context)
     {
-        return base.UpdateTransportersVehicle(request, context);
+        var item = await dbContext.VehiclesTransporters.FindAsync(request.VehicleTransporters.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Transporternot found"));
+        item = (VehiclesTransporter)request.VehicleTransporters;
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult(request.VehicleTransporters);
     }
 
-    public override Task<TransportersVehiclesObject> DeleteTransportersVehicle(GetOrDeleteTransportersVehiclesRequest request, ServerCallContext context)
+    public override async Task<VehiclesTransportersObject> DeleteVehiclesTransporter(GetOrDeleteVehiclesTransportersRequest request, ServerCallContext context)
     {
-        return base.DeleteTransportersVehicle(request, context);
+        var item = await dbContext.VehiclesTransporters.FindAsync(request.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Type not found"));
+        dbContext.VehiclesTransporters.Remove(item);
+        await dbContext.SaveChangesAsync();
+
+        return await Task.FromResult((VehiclesTransportersObject)item);
     }
 
     /*DBContext db;
