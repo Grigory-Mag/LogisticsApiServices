@@ -7,12 +7,12 @@ namespace LogisticsApiServices.DBPostModels
     {
         public Transporter()
         {
-            IdVehicles = new HashSet<Vehicle>();
+            TransportersVehicles = new HashSet<TransportersVehicle>();
         }
 
         public int Id { get; set; }
         public string? Name { get; set; }
 
-        public virtual ICollection<Vehicle> IdVehicles { get; set; }
+        public virtual ICollection<TransportersVehicle> TransportersVehicles { get; set; }
     }
 }

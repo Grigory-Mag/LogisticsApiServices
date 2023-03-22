@@ -837,14 +837,75 @@ public class UserApiService : UserService.UserServiceBase
         return await Task.FromResult((VehiclesObject)item);
     }
 
+
     /*
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 * CRUD OPERATIONS FOR 
-* --- VEHICLE TABLE ---
+* --- VEHICLE TYPE TABLE ---
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
-    
+    public override async Task<VehiclesTypesObject> GetVehiclesType(GetOrDeleteVehiclesTypesRequest request, ServerCallContext context)
+    {
+        var item = await dbContext.VehicleTypes.FindAsync(request.Id);
+        if (item == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "VehicleType not found"));
+
+        return await Task.FromResult((VehiclesTypesObject)item);
+    }
+
+    public override Task<ListVehiclesTypes> GetListVehiclesTypes(Empty request, ServerCallContext context)
+    {
+        return base.GetListVehiclesTypes(request, context);
+    }
+
+    public override Task<VehiclesTypesObject> CreateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
+    {
+        return base.CreateVehiclesType(request, context);
+    }
+
+    public override Task<VehiclesTypesObject> UpdateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
+    {
+        return base.UpdateVehiclesType(request, context);
+    }
+
+    public override Task<VehiclesTypesObject> DeleteVehiclesType(GetOrDeleteVehiclesTypesRequest request, ServerCallContext context)
+    {
+        return base.DeleteVehiclesType(request, context);
+    }
+
+    /*
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+* CRUD OPERATIONS FOR 
+* --- TRANSPORTERS VEHICLE TABLE ---
+* =*=*=*=*=*=*=*=*=*=*=*=*=*
+*/
+
+    public override Task<TransportersVehiclesObject> GetTransportersVehicle(GetOrDeleteTransportersVehiclesRequest request, ServerCallContext context)
+    {
+
+        return base.GetTransportersVehicle(request, context);
+    }
+
+    public override Task<ListTransportersVehicles> GetListTransportersVehicles(Empty request, ServerCallContext context)
+    {
+        return base.GetListTransportersVehicles(request, context);
+    }
+
+    public override Task<TransportersVehiclesObject> CreateTransportersVehicle(CreateOrUpdateTransportersVehiclesRequest request, ServerCallContext context)
+    {
+        return base.CreateTransportersVehicle(request, context);
+    }
+
+    public override Task<TransportersVehiclesObject> UpdateTransportersVehicle(CreateOrUpdateTransportersVehiclesRequest request, ServerCallContext context)
+    {
+        return base.UpdateTransportersVehicle(request, context);
+    }
+
+    public override Task<TransportersVehiclesObject> DeleteTransportersVehicle(GetOrDeleteTransportersVehiclesRequest request, ServerCallContext context)
+    {
+        return base.DeleteTransportersVehicle(request, context);
+    }
 
     /*DBContext db;
     public UserApiService(DBContext db)

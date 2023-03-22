@@ -224,11 +224,6 @@ namespace ApiService
 
     }
  
- public sealed partial class VehiclesTypesObject
-    {
-
-    }
- 
  public sealed partial class ListVehiclesTypes
     {
 
@@ -248,8 +243,20 @@ namespace ApiService
             };
         }
     }
- 
- public sealed partial class ListVehicles
+
+    public sealed partial class VehiclesTypesObject
+    {
+        public static explicit operator VehicleType(VehiclesTypesObject item)
+        {
+            return new VehicleType()
+            {
+                Id = item.Id,
+                Name = item.Name,
+            };
+        }
+    }
+
+    public sealed partial class ListVehicles
     {
 
     }

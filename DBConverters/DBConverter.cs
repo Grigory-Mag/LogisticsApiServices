@@ -171,21 +171,43 @@ namespace LogisticsApiServices.DBPostModels
 
     public partial class Vehicle
     {
-        public static explicit operator VehiclesObject(Vehicle requisite)
+        /*
+        public Vehicle (Vehicle item)
+        {
+            Id = item.Id;
+            Type = item.Type;
+            Number = item.Number;
+            Owner = item.Owner;
+            Driver = item.Driver;
+
+            DriverNavigation = item.DriverNavigation;            
+            OwnerNavigation = item.OwnerNavigation;
+            TypeNavigation = item.TypeNavigation;
+            Requests = item.Requests;
+        }*/
+
+        public static explicit operator VehiclesObject(Vehicle item)
         {
             return new VehiclesObject()
             {
-                Id = requisite.Id,
-                Driver = requisite.Driver,
-                Number = requisite.Number,
-                Owner = requisite.Owner,
-                Type = requisite.Type,
+                Id = item.Id,
+                Driver = item.Driver,
+                Number = item.Number,
+                Owner = item.Owner,
+                Type = item.Type,
             };
         }
     }
 
     public partial class VehicleType
     {
-
+        public static explicit operator VehiclesTypesObject(VehicleType item)
+        {
+            return new VehiclesTypesObject()
+            {
+                Id = item.Id,
+                Name = item.Name,
+            };
+        }
     }
 }

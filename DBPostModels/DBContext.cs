@@ -28,6 +28,7 @@ namespace LogisticsApiServices.DBPostModels
         public virtual DbSet<Request> Requests { get; set; } = null!;
         public virtual DbSet<Requisite> Requisites { get; set; } = null!;
         public virtual DbSet<Transporter> Transporters { get; set; } = null!;
+        public virtual DbSet<TransportersVehicle> TransportersVehicles { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
         public virtual DbSet<VehicleType> VehicleTypes { get; set; } = null!;
 
@@ -266,23 +267,32 @@ namespace LogisticsApiServices.DBPostModels
                     .HasDefaultValueSql("nextval('logistics_shema.transporters_id_seq'::regclass)");
 
                 entity.Property(e => e.Name).HasColumnName("name");
+            });
 
-                entity.HasMany(d => d.IdVehicles)
-                    .WithMany(p => p.IdTransporters)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "TransportersVehicle",
-                        l => l.HasOne<Vehicle>().WithMany().HasForeignKey("IdVehicle").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Transporters_Vehicles_Vehicles_id_fk"),
-                        r => r.HasOne<Transporter>().WithMany().HasForeignKey("IdTransporter").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Transporters_Vehicles_Transporters_id_fk"),
-                        j =>
-                        {
-                            j.HasKey("IdTransporter", "IdVehicle").HasName("Transporters_Vehicles_pk");
+            modelBuilder.Entity<TransportersVehicle>(entity =>
+            {
+                entity.HasKey(e => new { e.IdTransporter, e.IdVehicle })
+                    .HasName("Transporters_Vehicles_pk");
 
-                            j.ToTable("Transporters_Vehicles", "logistics_shema");
+                entity.ToTable("Transporters_Vehicles", "logistics_shema");
 
-                            j.IndexerProperty<int>("IdTransporter").HasColumnName("id_transporter");
+                entity.Property(e => e.IdTransporter).HasColumnName("id_transporter");
 
-                            j.IndexerProperty<int>("IdVehicle").HasColumnName("id_vehicle");
-                        });
+                entity.Property(e => e.IdVehicle).HasColumnName("id_vehicle");
+
+                entity.Property(e => e.Test).HasColumnName("test");
+
+                entity.HasOne(d => d.IdTransporterNavigation)
+                    .WithMany(p => p.TransportersVehicles)
+                    .HasForeignKey(d => d.IdTransporter)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Transporters_Vehicles_Transporters_id_fk");
+
+                entity.HasOne(d => d.IdVehicleNavigation)
+                    .WithMany(p => p.TransportersVehicles)
+                    .HasForeignKey(d => d.IdVehicle)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Transporters_Vehicles_Vehicles_id_fk");
             });
 
             modelBuilder.Entity<Vehicle>(entity =>
