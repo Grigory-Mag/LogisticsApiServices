@@ -490,7 +490,8 @@ message VehiclesTransportersObject{
 }
 
 message GetOrDeleteVehiclesTransportersRequest {
-	int32 id = 1;
+	int32 id_transporter = 1;
+	int32 id_vehicle = 2;
 }
 
 message ListVehiclesTransporters{
