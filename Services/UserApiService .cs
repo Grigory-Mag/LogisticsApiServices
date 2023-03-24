@@ -111,9 +111,9 @@ public class UserApiService : UserService.UserServiceBase
 
     public override async Task<CargoConstraintsObject> GetCargoConstraint(GetOrDeleteCargoConstraintsRequest request, ServerCallContext context)
     {
-        var cargoConstraint = await dbContext.CargoConstraints.FindAsync(request.IdCargo);
+        var cargoConstraint = await dbContext.CargoConstraints.FindAsync(request.IdCargo, request.IdConstraint);
         if (cargoConstraint == null)
-            throw new RpcException(new Status(StatusCode.NotFound, "CargoType not found"));
+            throw new RpcException(new Status(StatusCode.NotFound, "CargoConstraint not found"));
         var cargoConstraintObject = (CargoConstraintsObject)cargoConstraint;
 
         return await Task.FromResult(cargoConstraintObject);
@@ -943,7 +943,7 @@ public class UserApiService : UserService.UserServiceBase
     {
         var item = await dbContext.VehiclesTransporters.FindAsync(request.VehicleTransporters.Vehicle, request.VehicleTransporters.Vehicle);
         if (item == null)
-            throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Transporternot found"));
+            throw new RpcException(new Status(StatusCode.NotFound, "VehicleTransporter not found"));
         item = (VehiclesTransporter)request.VehicleTransporters;
         await dbContext.SaveChangesAsync();
 

@@ -156,6 +156,7 @@ message ListCargoConstraints {
 
 message GetOrDeleteCargoConstraintsRequest{
 	int32 id_cargo = 1;
+	int32 id_constraint = 2;
 }
 
 message CreateOrUpdateCargoConstraintsRequest {
