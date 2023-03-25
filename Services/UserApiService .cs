@@ -146,7 +146,7 @@ public class UserApiService : UserService.UserServiceBase
 
     public override async Task<CargoConstraintsObject> UpdateCargoConstraint(CreateOrUpdateCargoConstraintsRequest request, ServerCallContext context)
     {
-        var cargoConstraintDB = await dbContext.CargoConstraints.FindAsync(request.CargoConstraints.IdCargo, request.CargoConstraints);
+        var cargoConstraintDB = await dbContext.CargoConstraints.FindAsync(request.CargoConstraints.IdCargo, request.CargoConstraints.IdConstraint);
         if (cargoConstraintDB == null)
             throw new RpcException(new Status(StatusCode.NotFound, "CargoConstraint not found"));
         cargoConstraintDB = (CargoConstraint)request.CargoConstraints;
