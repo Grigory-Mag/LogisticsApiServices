@@ -95,7 +95,7 @@ namespace LogisticsApiServices.DBPostModels
             {
                 Id=driverLicence.Id,
                 Series = driverLicence.Series,
-                Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(driverLicence.Date),
+                Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(driverLicence.Date.ToUniversalTime()),
                 Number = driverLicence.Number
             };
         }
@@ -109,7 +109,7 @@ namespace LogisticsApiServices.DBPostModels
             {
                 Id = order.Id,
                 Cargo = order.Cargo,
-                Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(order.Date),
+                Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(order.Date.ToUniversalTime()),
             };
         }
     }

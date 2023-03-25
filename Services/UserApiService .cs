@@ -930,13 +930,11 @@ public class UserApiService : UserService.UserServiceBase
 
     public override async Task<VehiclesTransportersObject> CreateVehiclesTransporter(CreateOrUpdateVehiclesTransportersRequest request, ServerCallContext context)
     {
-        var item = await dbContext.VehiclesTransporters.FindAsync(request.VehicleTransporters.Vehicle, request.VehicleTransporters.Vehicle);
-        if (item == null)
-            throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Transporters not found"));
-        item = (VehiclesTransporter)request.VehicleTransporters;
+        var item = (VehiclesTransporter)request.VehicleTransporters;
+        await dbContext.VehiclesTransporters.AddAsync(item);
         await dbContext.SaveChangesAsync();
 
-        return await Task.FromResult(request.VehicleTransporters);
+        return await Task.FromResult((VehiclesTransportersObject)item);
     }
 
     public override async Task<VehiclesTransportersObject> UpdateVehiclesTransporter(CreateOrUpdateVehiclesTransportersRequest request, ServerCallContext context)
