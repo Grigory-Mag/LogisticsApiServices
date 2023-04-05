@@ -10,10 +10,10 @@ namespace LogisticsApiServices.DBConverters
             {
                 if (!optionsBuilder.IsConfigured)
                 {
-                    var mem = new ConfigurationBuilder()
+                    var configurationBuilder = new ConfigurationBuilder()
                             .SetBasePath(Directory.GetCurrentDirectory())
                             .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
-                    IConfiguration _configuration = mem.Build();
+                    IConfiguration _configuration = configurationBuilder.Build();
                     var connection = _configuration.GetConnectionString("Postgres");
 
                     optionsBuilder.UseNpgsql(connection);
