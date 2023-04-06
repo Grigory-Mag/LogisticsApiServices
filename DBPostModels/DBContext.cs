@@ -16,6 +16,22 @@ namespace LogisticsApiServices.DBPostModels
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+
+                var configurationBuilder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
+                IConfiguration _configuration = configurationBuilder.Build();
+                var connection = _configuration.GetConnectionString("Postgres");
+
+                optionsBuilder.UseNpgsql(connection);
+
+            }
+        }
+
         public virtual DbSet<Cargo> Cargos { get; set; } = null!;
         public virtual DbSet<CargoConstraint> CargoConstraints { get; set; } = null!;
         public virtual DbSet<CargoType> CargoTypes { get; set; } = null!;
