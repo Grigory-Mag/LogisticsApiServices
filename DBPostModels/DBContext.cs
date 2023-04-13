@@ -16,22 +16,6 @@ namespace LogisticsApiServices.DBPostModels
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-
-                var configurationBuilder = new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
-                IConfiguration _configuration = configurationBuilder.Build();
-                var connection = _configuration.GetConnectionString("Postgres");
-
-                optionsBuilder.UseNpgsql(connection);
-
-            }
-        }
-
         public virtual DbSet<Cargo> Cargos { get; set; } = null!;
         public virtual DbSet<CargoConstraint> CargoConstraints { get; set; } = null!;
         public virtual DbSet<CargoType> CargoTypes { get; set; } = null!;
@@ -44,11 +28,26 @@ namespace LogisticsApiServices.DBPostModels
         public virtual DbSet<Request> Requests { get; set; } = null!;
         public virtual DbSet<Requisite> Requisites { get; set; } = null!;
         public virtual DbSet<Transporter> Transporters { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
         public virtual DbSet<VehicleType> VehicleTypes { get; set; } = null!;
         public virtual DbSet<VehiclesTransporter> VehiclesTransporters { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
 
+                var configurationBuilder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
+                IConfiguration _configuration = configurationBuilder.Build();
+                var connection = _configuration.GetConnectionString("PostgresLocal");
+
+                optionsBuilder.UseNpgsql(connection);
+
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -276,6 +275,17 @@ namespace LogisticsApiServices.DBPostModels
                     .HasDefaultValueSql("nextval('logistics_shema.transporters_id_seq'::regclass)");
 
                 entity.Property(e => e.Name).HasColumnName("name");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("Users", "logistics_shema");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Login).HasColumnName("login");
+
+                entity.Property(e => e.Password).HasColumnName("password");
             });
 
             modelBuilder.Entity<Vehicle>(entity =>
