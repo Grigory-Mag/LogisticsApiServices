@@ -111,6 +111,8 @@ service UserService{
   rpc CreateVehiclesTransporter (CreateOrUpdateVehiclesTransportersRequest) returns (VehiclesTransportersObject);
   rpc UpdateVehiclesTransporter (CreateOrUpdateVehiclesTransportersRequest) returns (VehiclesTransportersObject);
   rpc DeleteVehiclesTransporter (GetOrDeleteVehiclesTransportersRequest) returns (VehiclesTransportersObject);
+  /* LOGIN */
+  rpc LoginUser(LoginRequest) returns (LoginReply);
 }
 
 /* * * * * 
@@ -501,4 +503,21 @@ message ListVehiclesTransporters{
 
 message CreateOrUpdateVehiclesTransportersRequest {
 	VehiclesTransportersObject VehicleTransporters = 1;
+}
+
+/* * * * * * * * * * * * * *
+*			LOGIN
+* * * * * * * * * * * * * */
+
+message LoginObject{
+	string login = 1;
+	string password = 2;
+}
+
+message LoginRequest{
+	LoginObject data = 1;
+}
+
+message LoginReply{
+	string token = 1;
 }
