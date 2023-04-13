@@ -1,6 +1,9 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using LogisticsApiServices.DBPostModels;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using System.Data.Entity;
 
 namespace ApiService
 {
@@ -12,7 +15,7 @@ namespace ApiService
         * --- CARGO TABLE ---
         * =*=*=*=*=*=*=*=*=*=*=*=*=*
         */
-
+        [Authorize]
         public override async Task<CargoObject> GetCargo(GetOrDeleteCargoRequest request, ServerCallContext context)
         {
             var cargo = await dbContext.Cargos.FindAsync(request.Id);
