@@ -1,4 +1,5 @@
 ﻿using ApiService;
+using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 
@@ -9,15 +10,22 @@ namespace LogisticsApiServices.DBPostModels
     {
         public static explicit operator CargoObject(Cargo cargo)
         {
+            List <CargoConstraintsObject> cargoConstraintsObjectsList = new List <CargoConstraintsObject>();
+            cargo.CargoConstraints.ToList().ForEach(item => cargoConstraintsObjectsList.Add((CargoConstraintsObject)item));
+
+            ListCargoConstraints cargoConstraints = new ListCargoConstraints();
+            cargoConstraints.CargoConstraints.AddRange(cargoConstraintsObjectsList);
+
             return new CargoObject()
             {
                 Id = cargo.Id,
                 Type = cargo.Type,
-                Constraints = cargo.Constraints,
                 Weight = cargo.Weight,
                 Volume = cargo.Volume,
                 Name = cargo.Name,
                 Price = cargo.Price,
+                ConstraintsObject = cargoConstraints,
+                CargoType = (CargoTypesObject)cargo.TypeNavigation
             };
         }
     }

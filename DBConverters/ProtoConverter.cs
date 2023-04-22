@@ -10,7 +10,6 @@ namespace ApiService
             {
                 Id = cargoObject.Id,
                 Type = cargoObject.Type,
-                Constraints = cargoObject.Constraints,
                 Weight = cargoObject.Weight,
                 Volume = cargoObject.Volume,
                 Name = cargoObject.Name,

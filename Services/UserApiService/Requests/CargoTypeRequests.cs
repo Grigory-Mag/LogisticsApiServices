@@ -27,7 +27,7 @@ namespace ApiService
         public override async Task<ListCargoType> GetListCargoTypes(Empty request, ServerCallContext context)
         {
             var listCargoTypes = new ListCargoType();
-            var cargoTypes = dbContext.Cargos.Select(item => new CargoTypesObject
+            var cargoTypes = dbContext.CargoTypes.Select(item => new CargoTypesObject
             {
                 Id = item.Id,
                 Name = item.Name

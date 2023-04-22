@@ -2,8 +2,9 @@
 using Grpc.Core;
 using LogisticsApiServices.DBPostModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Data.Entity;
+using System.Runtime.InteropServices;
 
 namespace ApiService
 {
@@ -18,33 +19,43 @@ namespace ApiService
         [Authorize]
         public override async Task<CargoObject> GetCargo(GetOrDeleteCargoRequest request, ServerCallContext context)
         {
+            var data = dbContext.Cargos
+            .Include(i => i.CargoConstraints)
+                .ThenInclude(c => c.IdConstraintNavigation)
+            .Include(i => i.TypeNavigation)
+            .Where(item => item.Id == request.Id).First();
+
             var cargo = await dbContext.Cargos.FindAsync(request.Id);
             if (cargo == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Employee not found"));
-            var cargoObject = (CargoObject)cargo;
+            var cargoObject = (CargoObject)data;
             return await Task.FromResult(cargoObject);
-
-            /* var user = new NewTestTable { StringData = request.Name, IntData = request.Age };
-            await db.NewTestTables.AddAsync(user);
-            await db.SaveChangesAsync();
-            var reply = new UserReply() { Id = user.Id, Name = user.StringData, Age = (int)user.IntData };
-            return await Task.FromResult(cargo); */
         }
 
         public override async Task<ListCargo> GetListCargo(Empty request, ServerCallContext context)
         {
+            var data = dbContext.Cargos
+            .Include(i => i.CargoConstraints)
+                .ThenInclude(c => c.IdConstraintNavigation)
+            .Include(i => i.TypeNavigation).ToList();
+
+            var dataReady = new List<CargoObject>();
+            data.ForEach(item => dataReady.Add((CargoObject)item));
+
             var listCargoObjects = new ListCargo();
+            listCargoObjects.Cargo.AddRange(dataReady);
+
+            /*var listCargoObjects = new ListCargo();
             var cargos = dbContext.Cargos.Select(item => new CargoObject
             {
                 Id = item.Id,
-                Constraints = item.Constraints,
                 Name = item.Name,
                 Price = item.Price,
                 Type = item.Type,
                 Volume = item.Volume,
                 Weight = item.Volume
             }).ToList();
-            listCargoObjects.Cargo.AddRange(cargos);
+            listCargoObjects.Cargo.AddRange(cargos);*/
             if (listCargoObjects.Cargo.Count == 0)
                 throw new RpcException(new Status(StatusCode.NotFound, "Cargo not found"));
             return await Task.FromResult(listCargoObjects);
@@ -67,7 +78,6 @@ namespace ApiService
             if (cargoDB == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Cargo not found"));
             cargoDB.Type = cargoObject.Type;
-            cargoDB.Constraints = cargoObject.Constraints;
             cargoDB.Weight = cargoObject.Weight;
             cargoDB.Volume = cargoObject.Volume;
             cargoDB.Name = cargoObject.Name;
