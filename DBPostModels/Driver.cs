@@ -19,5 +19,5 @@ public partial class Driver
 
     public virtual DriverLicence LicenceNavigation { get; set; } = null!;
 
-    public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 }

@@ -44,11 +44,10 @@ namespace ApiService
         }
 
         public override async Task<VehiclesTypesObject> UpdateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
-        {
-            var item = await dbContext.VehicleTypes.FindAsync(request.VehiclesTypes.Id);
-            if (item == null)
+        {            
+            if (request.VehiclesTypes == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Vehicle Type not found"));
-            item = (VehicleType)request.VehiclesTypes;
+            dbContext.VehicleTypes.Update((VehicleType)request.VehiclesTypes);
             await dbContext.SaveChangesAsync();
 
             return await Task.FromResult(request.VehiclesTypes);

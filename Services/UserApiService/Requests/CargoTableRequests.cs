@@ -19,24 +19,19 @@ namespace ApiService
         [Authorize]
         public override async Task<CargoObject> GetCargo(GetOrDeleteCargoRequest request, ServerCallContext context)
         {
-            var data = dbContext.Cargos
-            .Include(i => i.CargoConstraints)
-                .ThenInclude(c => c.IdConstraintNavigation)
+            var cargo = dbContext.Cargos
             .Include(i => i.TypeNavigation)
             .Where(item => item.Id == request.Id).First();
 
-            var cargo = await dbContext.Cargos.FindAsync(request.Id);
             if (cargo == null)
-                throw new RpcException(new Status(StatusCode.NotFound, "Employee not found"));
-            var cargoObject = (CargoObject)data;
+                throw new RpcException(new Status(StatusCode.NotFound, "Cargo not found"));
+            var cargoObject = (CargoObject)cargo;
             return await Task.FromResult(cargoObject);
         }
 
         public override async Task<ListCargo> GetListCargo(Empty request, ServerCallContext context)
         {
             var data = dbContext.Cargos
-            .Include(i => i.CargoConstraints)
-                .ThenInclude(c => c.IdConstraintNavigation)
             .Include(i => i.TypeNavigation).ToList();
 
             var dataReady = new List<CargoObject>();
@@ -63,28 +58,24 @@ namespace ApiService
 
         public override async Task<CargoObject> CreateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
         {
-            var cargoObject = request.Cargo;
-            var cargo = (Cargo)cargoObject;
+            var cargo = (Cargo)request.Cargo;
+            cargo.Type = cargo.TypeNavigation.Id;
+            cargo.TypeNavigation = null;
 
             await dbContext.Cargos.AddAsync(cargo);
             await dbContext.SaveChangesAsync();
-            return await Task.FromResult(cargoObject);
+            return await Task.FromResult(request.Cargo);
         }
 
         public override async Task<CargoObject> UpdateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
         {
-            var cargoObject = request.Cargo;
-            var cargoDB = await dbContext.Cargos.FindAsync(request.Cargo.Id);
-            if (cargoDB == null)
+            var cargo = (Cargo)request.Cargo;
+            if (cargo == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Cargo not found"));
-            cargoDB.Type = cargoObject.Type;
-            cargoDB.Weight = cargoObject.Weight;
-            cargoDB.Volume = cargoObject.Volume;
-            cargoDB.Name = cargoObject.Name;
-            cargoDB.Price = cargoObject.Price;
+            dbContext.Cargos.Update(cargo);
             await dbContext.SaveChangesAsync();
 
-            return await Task.FromResult(cargoObject);
+            return await Task.FromResult(request.Cargo);
         }
 
         /// <summary>
@@ -98,11 +89,11 @@ namespace ApiService
         public override async Task<CargoObject> DeleteCargo(GetOrDeleteCargoRequest request, ServerCallContext context)
         {
             var cargoDB = await dbContext.Cargos.FindAsync(request.Id);
+            var cargoObject = (CargoObject)cargoDB;
             if (cargoDB == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Cargo not found"));
             dbContext.Cargos.Remove(cargoDB);
             await dbContext.SaveChangesAsync();
-            var cargoObject = (CargoObject)cargoDB;
 
             return await Task.FromResult(cargoObject);
         }

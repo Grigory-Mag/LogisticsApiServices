@@ -45,10 +45,10 @@ namespace ApiService
 
         public override async Task<DriverLicenceObject> UpdateDriverLicence(CreateOrUpdateDriverLicenceRequest request, ServerCallContext context)
         {
-            var driverLicence = await dbContext.DriverLicences.FindAsync(request.DriverLicence.Id);
-            if (driverLicence == null)
+            //var driverLicence = await dbContext.DriverLicences.FindAsync(request.DriverLicence.Id);
+            if (request.DriverLicence == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "DriverLicence not found"));
-            driverLicence = (DriverLicence)request.DriverLicence;
+            dbContext.DriverLicences.Update((DriverLicence)request.DriverLicence);
             await dbContext.SaveChangesAsync();
 
             return await Task.FromResult(request.DriverLicence);
@@ -56,7 +56,8 @@ namespace ApiService
 
         public override async Task<DriverLicenceObject> DeleteDriverLicence(GetOrDeleteDriverLicenceRequest request, ServerCallContext context)
         {
-            var driverLicence = await dbContext.DriverLicences.FindAsync(request.Id);
+            var driverLicence = await dbContext.DriverLicences.FindAsync(request.Id);      
+
             if (driverLicence == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Driver Licence not found"));
             dbContext.DriverLicences.Remove(driverLicence);

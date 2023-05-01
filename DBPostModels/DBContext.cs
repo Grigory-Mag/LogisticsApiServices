@@ -17,35 +17,27 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<Cargo> Cargos { get; set; }
 
-    public virtual DbSet<CargoConstraint> CargoConstraints { get; set; }
-
     public virtual DbSet<CargoType> CargoTypes { get; set; }
-
-    public virtual DbSet<Constraint> Constraints { get; set; }
-
-    public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Driver> Drivers { get; set; }
 
     public virtual DbSet<DriverLicence> DriverLicences { get; set; }
 
-    public virtual DbSet<Order> Orders { get; set; }
-
-    public virtual DbSet<Ownership> Ownerships { get; set; }
-
     public virtual DbSet<Request> Requests { get; set; }
 
     public virtual DbSet<Requisite> Requisites { get; set; }
 
-    public virtual DbSet<Transporter> Transporters { get; set; }
+    public virtual DbSet<Role> Roles { get; set; }
+
+    public virtual DbSet<Route> Routes { get; set; }
+
+    public virtual DbSet<RouteAction> RouteActions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Vehicle> Vehicles { get; set; }
 
     public virtual DbSet<VehicleType> VehicleTypes { get; set; }
-
-    public virtual DbSet<VehiclesTransporter> VehiclesTransporters { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -72,6 +64,7 @@ public partial class DBContext : DbContext
             entity.ToTable("Cargo", "logistics_shema");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Constraints).HasColumnName("constraints");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.Type).HasColumnName("type");
@@ -81,27 +74,6 @@ public partial class DBContext : DbContext
             entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Cargos)
                 .HasForeignKey(d => d.Type)
                 .HasConstraintName("Cargo_Cargo_types_id_fk");
-        });
-
-        modelBuilder.Entity<CargoConstraint>(entity =>
-        {
-            entity.HasKey(e => new { e.IdConstraint, e.IdCargo }).HasName("Cargo_Constraints_pk");
-
-            entity.ToTable("Cargo_Constraints", "logistics_shema");
-
-            entity.Property(e => e.IdConstraint).HasColumnName("id_constraint");
-            entity.Property(e => e.IdCargo).HasColumnName("id_cargo");
-            entity.Property(e => e.Test).HasColumnName("test");
-
-            entity.HasOne(d => d.IdCargoNavigation).WithMany(p => p.CargoConstraints)
-                .HasForeignKey(d => d.IdCargo)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Cargo_Constraints_Cargo_id_fk");
-
-            entity.HasOne(d => d.IdConstraintNavigation).WithMany(p => p.CargoConstraints)
-                .HasForeignKey(d => d.IdConstraint)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Cargo_Constraints_Constraints_id_fk");
         });
 
         modelBuilder.Entity<CargoType>(entity =>
@@ -114,39 +86,6 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("nextval('logistics_shema.\"Cargo_types_id_seq\"'::regclass)")
                 .HasColumnName("id");
             entity.Property(e => e.Name).HasColumnName("name");
-        });
-
-        modelBuilder.Entity<Constraint>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("Constraints_pk");
-
-            entity.ToTable("Constraints", "logistics_shema");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.Desc).HasColumnName("desc");
-        });
-
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("Customers_pk");
-
-            entity.ToTable("Customers", "logistics_shema");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Cargo).HasColumnName("cargo");
-            entity.Property(e => e.Requisite).HasColumnName("requisite");
-
-            entity.HasOne(d => d.CargoNavigation).WithMany(p => p.Customers)
-                .HasForeignKey(d => d.Cargo)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Customers___fk");
-
-            entity.HasOne(d => d.RequisiteNavigation).WithMany(p => p.Customers)
-                .HasForeignKey(d => d.Requisite)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Customers_Requisites_Id_fk");
         });
 
         modelBuilder.Entity<Driver>(entity =>
@@ -184,35 +123,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Series).HasColumnName("series");
         });
 
-        modelBuilder.Entity<Order>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("Orders_pk");
-
-            entity.ToTable("Orders", "logistics_shema");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Cargo).HasColumnName("cargo");
-            entity.Property(e => e.Date)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("date");
-
-            entity.HasOne(d => d.CargoNavigation).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.Cargo)
-                .HasConstraintName("Orders_Cargo_id_fk");
-        });
-
-        modelBuilder.Entity<Ownership>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("Ownerships_pk");
-
-            entity.ToTable("Ownerships", "logistics_shema");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("nextval('logistics_shema.\"Ownerships_Id_seq\"'::regclass)")
-                .HasColumnName("id");
-            entity.Property(e => e.Name).HasColumnName("name");
-        });
-
         modelBuilder.Entity<Request>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Requests_pk");
@@ -220,18 +130,56 @@ public partial class DBContext : DbContext
             entity.ToTable("Requests", "logistics_shema");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Conditions).HasColumnName("conditions");
-            entity.Property(e => e.Order).HasColumnName("order");
+            entity.Property(e => e.Cargo).HasColumnName("cargo");
+            entity.Property(e => e.CreationDate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("creation_date");
+            entity.Property(e => e.Customer).HasColumnName("customer");
+            entity.Property(e => e.DocumentsOriginal).HasColumnName("documents_original");
+            entity.Property(e => e.Driver).HasColumnName("driver");
+            entity.Property(e => e.IsFinishied).HasColumnName("is_finishied");
             entity.Property(e => e.Price).HasColumnName("price");
+            entity.Property(e => e.Transporter).HasColumnName("transporter");
             entity.Property(e => e.Vehicle).HasColumnName("vehicle");
 
-            entity.HasOne(d => d.OrderNavigation).WithMany(p => p.Requests)
-                .HasForeignKey(d => d.Order)
-                .HasConstraintName("Requests_Orders_id_fk");
+            entity.HasOne(d => d.CargoNavigation).WithMany(p => p.Requests)
+                .HasForeignKey(d => d.Cargo)
+                .HasConstraintName("Requests_Cargo_id_fk");
+
+            entity.HasOne(d => d.CustomerNavigation).WithMany(p => p.RequestCustomerNavigations)
+                .HasForeignKey(d => d.Customer)
+                .HasConstraintName("Requests_Requisites_id_fk");
+
+            entity.HasOne(d => d.DriverNavigation).WithMany(p => p.Requests)
+                .HasForeignKey(d => d.Driver)
+                .HasConstraintName("Requests_Drivers_id_fk");
+
+            entity.HasOne(d => d.TransporterNavigation).WithMany(p => p.RequestTransporterNavigations)
+                .HasForeignKey(d => d.Transporter)
+                .HasConstraintName("Requests_Requisites_id_fk2");
 
             entity.HasOne(d => d.VehicleNavigation).WithMany(p => p.Requests)
                 .HasForeignKey(d => d.Vehicle)
                 .HasConstraintName("Requests_Vehicles_id_fk");
+
+            entity.HasMany(d => d.IdRoutes).WithMany(p => p.IdRequests)
+                .UsingEntity<Dictionary<string, object>>(
+                    "RoutesRequest",
+                    r => r.HasOne<Route>().WithMany()
+                        .HasForeignKey("IdRoute")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("Routes_Requests_Route_id_fk"),
+                    l => l.HasOne<Request>().WithMany()
+                        .HasForeignKey("IdRequests")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("Routes_Requests_Requests_id_fk"),
+                    j =>
+                    {
+                        j.HasKey("IdRequests", "IdRoute").HasName("Routes_Requests_pk");
+                        j.ToTable("Routes_Requests", "logistics_shema");
+                        j.IndexerProperty<int>("IdRequests").HasColumnName("id_requests");
+                        j.IndexerProperty<int>("IdRoute").HasColumnName("id_route");
+                    });
         });
 
         modelBuilder.Entity<Requisite>(entity =>
@@ -246,25 +194,55 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Ceo).HasColumnName("ceo");
             entity.Property(e => e.Inn).HasMaxLength(12);
             entity.Property(e => e.LegalAddress).HasColumnName("legal_address");
-            entity.Property(e => e.Ownership).HasColumnName("ownership");
+            entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Pts).HasColumnName("pts");
+            entity.Property(e => e.Role).HasColumnName("role");
 
-            entity.HasOne(d => d.OwnershipNavigation).WithMany(p => p.Requisites)
-                .HasForeignKey(d => d.Ownership)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("Requisites_Ownerships_Id_fk");
+            entity.HasOne(d => d.RoleNavigation).WithMany(p => p.Requisites)
+                .HasForeignKey(d => d.Role)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Requisites_Roles_id_fk");
         });
 
-        modelBuilder.Entity<Transporter>(entity =>
+        modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("transporters_pk");
+            entity.HasKey(e => e.Id).HasName("Organiztion_Roles_pk");
 
-            entity.ToTable("Transporters", "logistics_shema");
+            entity.ToTable("Roles", "logistics_shema");
 
             entity.Property(e => e.Id)
-                .HasDefaultValueSql("nextval('logistics_shema.transporters_id_seq'::regclass)")
+                .HasDefaultValueSql("nextval('logistics_shema.\"Organiztion_Roles_id_seq\"'::regclass)")
                 .HasColumnName("id");
             entity.Property(e => e.Name).HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Route>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Route_pk");
+
+            entity.ToTable("Route", "logistics_shema");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Action).HasColumnName("action");
+            entity.Property(e => e.ActionDate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("action_date");
+            entity.Property(e => e.Address).HasColumnName("address");
+
+            entity.HasOne(d => d.ActionNavigation).WithMany(p => p.Routes)
+                .HasForeignKey(d => d.Action)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Route_Route_Actions_id_fk");
+        });
+
+        modelBuilder.Entity<RouteAction>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Route_Actions_pk");
+
+            entity.ToTable("Route_Actions", "logistics_shema");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Action).HasColumnName("action");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -277,7 +255,10 @@ public partial class DBContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Login).HasColumnName("login");
+            entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Password).HasColumnName("password");
+            entity.Property(e => e.Patroynymic).HasColumnName("patroynymic");
+            entity.Property(e => e.Surname).HasColumnName("surname");
         });
 
         modelBuilder.Entity<Vehicle>(entity =>
@@ -287,20 +268,15 @@ public partial class DBContext : DbContext
             entity.ToTable("Vehicles", "logistics_shema");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Driver).HasColumnName("driver");
             entity.Property(e => e.Number).HasColumnName("number");
             entity.Property(e => e.Owner).HasColumnName("owner");
+            entity.Property(e => e.TrailerNumber).HasColumnName("trailer_number");
             entity.Property(e => e.Type).HasColumnName("type");
-
-            entity.HasOne(d => d.DriverNavigation).WithMany(p => p.Vehicles)
-                .HasForeignKey(d => d.Driver)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Vehicles_Drivers_id_fk");
 
             entity.HasOne(d => d.OwnerNavigation).WithMany(p => p.Vehicles)
                 .HasForeignKey(d => d.Owner)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Vehicles_Ownerships_id_fk");
+                .HasConstraintName("Vehicles_Requisites_id_fk");
 
             entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Vehicles)
                 .HasForeignKey(d => d.Type)
@@ -316,27 +292,6 @@ public partial class DBContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name).HasColumnName("name");
-        });
-
-        modelBuilder.Entity<VehiclesTransporter>(entity =>
-        {
-            entity.HasKey(e => new { e.IdTransporter, e.IdVehicle }).HasName("Transporters_Vehicles_pk");
-
-            entity.ToTable("Vehicles_Transporters", "logistics_shema");
-
-            entity.Property(e => e.IdTransporter).HasColumnName("id_transporter");
-            entity.Property(e => e.IdVehicle).HasColumnName("id_vehicle");
-            entity.Property(e => e.Test).HasColumnName("test");
-
-            entity.HasOne(d => d.IdTransporterNavigation).WithMany(p => p.VehiclesTransporters)
-                .HasForeignKey(d => d.IdTransporter)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Transporters_Vehicles_Transporters_id_fk");
-
-            entity.HasOne(d => d.IdVehicleNavigation).WithMany(p => p.VehiclesTransporters)
-                .HasForeignKey(d => d.IdVehicle)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Transporters_Vehicles_Vehicles_id_fk");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace LogisticsApiServices.DBPostModels;
 
 public partial class Cargo
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     public int? Type { get; set; }
@@ -17,11 +21,9 @@ public partial class Cargo
 
     public double? Price { get; set; }
 
-    public virtual ICollection<CargoConstraint> CargoConstraints { get; set; } = new List<CargoConstraint>();
+    public string? Constraints { get; set; }
 
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
     public virtual CargoType? TypeNavigation { get; set; }
 }

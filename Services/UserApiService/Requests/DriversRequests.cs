@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
 {
@@ -14,7 +15,9 @@ namespace ApiService
 
         public override async Task<DriversObject> GetDriver(GetOrDeleteDriversRequest request, ServerCallContext context)
         {
-            var driver = await dbContext.Drivers.FindAsync(request.Id);
+            var driver = dbContext.Drivers
+                .Include(ln => ln.LicenceNavigation)
+                .First(i => i.Id == request.Id);
             if (driver == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Driver not found"));
 
@@ -23,11 +26,11 @@ namespace ApiService
 
         public override async Task<ListDrivers> GetListDrivers(Empty request, ServerCallContext context)
         {
+            var drivers = dbContext.Drivers
+            .Include(ln => ln.LicenceNavigation)
+            .ToList();
             var listDrivers = new ListDrivers();
-            var drivers = dbContext.Drivers.Select(item =>
-                new DriversObject((DriversObject)item)
-            ).ToList();
-            listDrivers.Drivers.AddRange(drivers);
+            drivers.ForEach(item => listDrivers.Drivers.Add((DriversObject)item));
             if (listDrivers.Drivers.Count == 0)
                 throw new RpcException(new Status(StatusCode.NotFound, "Drivers not found"));
 
@@ -45,10 +48,10 @@ namespace ApiService
 
         public override async Task<DriversObject> UpdateDriver(CreateOrUpdateDriversRequest request, ServerCallContext context)
         {
-            var driver = await dbContext.Drivers.FindAsync(request.Driver.Id);
-            if (driver == null)
+            //var driver = await dbContext.Drivers.FindAsync(request.Driver.Id);
+            if (request.Driver == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Driver not found"));
-            driver = (Driver)request.Driver;
+            dbContext.Drivers.Update((Driver)request.Driver);
             await dbContext.SaveChangesAsync();
 
             return await Task.FromResult(request.Driver);

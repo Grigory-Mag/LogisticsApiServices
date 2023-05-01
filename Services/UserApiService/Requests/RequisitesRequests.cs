@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
 {
@@ -14,7 +15,9 @@ namespace ApiService
 
         public override async Task<RequisitesObject> GetRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
         {
-            var item = await dbContext.Requisites.FindAsync(request.Id);
+            var item = dbContext.Requisites
+                .Include(item => item.RoleNavigation)
+                .First(item => item.Id == request.Id);
             if (item == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Requisite not found"));
 
@@ -23,11 +26,14 @@ namespace ApiService
 
         public override async Task<ListRequisites> GetListRequisites(Empty request, ServerCallContext context)
         {
+            var items = dbContext.Requisites
+                .Include(item => item.RoleNavigation)
+                .ToList();
+            var itemsReady = new List<RequisitesObject>();
+            items.ForEach(val => itemsReady.Add((RequisitesObject)val));
+
             var listItems = new ListRequisites();
-            var items = dbContext.Requisites.Select(item =>
-                new RequisitesObject((RequisitesObject)item)
-            ).ToList();
-            listItems.Requisites.AddRange(items);
+            listItems.Requisites.AddRange(itemsReady);
             if (listItems.Requisites.Count == 0)
                 throw new RpcException(new Status(StatusCode.NotFound, "Requisite not found"));
 
@@ -45,10 +51,10 @@ namespace ApiService
 
         public override async Task<RequisitesObject> UpdateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
         {
-            var item = await dbContext.Requisites.FindAsync(request.Requisite.Id);
-            if (item == null)
+            //var item = await dbContext.Requisites.FindAsync(request.Requisite.Id);
+            if (request.Requisite == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Requisite not found"));
-            item = (Requisite)request.Requisite;
+            dbContext.Requisites.Update((Requisite)request.Requisite);
             await dbContext.SaveChangesAsync();
 
             return await Task.FromResult(request.Requisite);

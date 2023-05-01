@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
 {
@@ -14,7 +15,23 @@ namespace ApiService
 
         public override async Task<RequestsObject> GetRequest(GetOrDeleteRequestObjRequest request, ServerCallContext context)
         {
-            var item = await dbContext.Requests.FindAsync(request.Id);
+            var item = dbContext.Requests
+                .Include(cn => cn.CargoNavigation)
+                    .ThenInclude(ct => ct.TypeNavigation)
+                 .Include(cun => cun.CustomerNavigation)
+                    .ThenInclude(rn => rn.RoleNavigation)
+                 .Include(tn => tn.TransporterNavigation)
+                    .ThenInclude(rn => rn.RoleNavigation)
+                 .Include(vn => vn.VehicleNavigation)
+                    .Include(vn => vn.VehicleNavigation)
+                    .ThenInclude(on => on.OwnerNavigation)
+                    .Include(vn => vn.VehicleNavigation)
+                    .ThenInclude(tn => tn.TypeNavigation)
+                .Include(dn => dn.DriverNavigation)
+                    .ThenInclude(ln => ln.LicenceNavigation)
+                .Where(i => i.Id == request.Id)
+                .First();
+
             if (item == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Request not found"));
 
@@ -23,6 +40,22 @@ namespace ApiService
 
         public override async Task<ListRequest> GetListRequests(Empty request, ServerCallContext context)
         {
+            var item = dbContext.Requests
+                .Include(cn => cn.CargoNavigation)
+                    .ThenInclude(ct => ct.TypeNavigation)
+                 .Include(cun => cun.CustomerNavigation)
+                    .ThenInclude(rn => rn.RoleNavigation)
+                 .Include(tn => tn.TransporterNavigation)
+                    .ThenInclude(rn => rn.RoleNavigation)
+                 .Include(vn => vn.VehicleNavigation)
+                    .Include(vn => vn.VehicleNavigation)
+                    .ThenInclude(on => on.OwnerNavigation)
+                    .Include(vn => vn.VehicleNavigation)
+                    .ThenInclude(tn => tn.TypeNavigation)
+                 .Include(dn => dn.DriverNavigation)
+                    .ThenInclude(ln => ln.LicenceNavigation)
+                 .ToList();
+
             var listItems = new ListRequest();
             var items = dbContext.Requests.Select(item =>
                 new RequestsObject((RequestsObject)item)
@@ -45,10 +78,10 @@ namespace ApiService
 
         public override async Task<RequestsObject> UpdateRequest(CreateOrUpdateRequestObjRequest request, ServerCallContext context)
         {
-            var item = await dbContext.Requests.FindAsync(request.Requests.Id);
+            var item = (Request)request.Requests;
             if (item == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Request not found"));
-            item = (Request)request.Requests;
+            dbContext.Requests.Update(item);
             await dbContext.SaveChangesAsync();
 
             return await Task.FromResult(request.Requests);

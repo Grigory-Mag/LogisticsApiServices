@@ -13,15 +13,11 @@ public partial class Vehicle
 
     public int Owner { get; set; }
 
-    public int Driver { get; set; }
+    public string? TrailerNumber { get; set; }
 
-    public virtual Driver DriverNavigation { get; set; } = null!;
-
-    public virtual Ownership OwnerNavigation { get; set; } = null!;
+    public virtual Requisite OwnerNavigation { get; set; } = null!;
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
     public virtual VehicleType TypeNavigation { get; set; } = null!;
-
-    public virtual ICollection<VehiclesTransporter> VehiclesTransporters { get; set; } = new List<VehiclesTransporter>();
 }

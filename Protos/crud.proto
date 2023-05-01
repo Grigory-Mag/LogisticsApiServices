@@ -20,30 +20,12 @@ service UserService{
   rpc CreateCargo(CreateOrUpdateCargoRequest) returns (CargoObject);
   rpc UpdateCargo(CreateOrUpdateCargoRequest) returns (CargoObject);
   rpc DeleteCargo(GetOrDeleteCargoRequest) returns (CargoObject);
-  /* CARGO_CONSTRAINTS */
-  rpc GetCargoConstraint(GetOrDeleteCargoConstraintsRequest) returns (CargoConstraintsObject);
-  rpc GetListCargoConstraints(google.protobuf.Empty) returns (ListCargoConstraints);
-  rpc CreateCargoConstraint(CreateOrUpdateCargoConstraintsRequest) returns (CargoConstraintsObject);
-  rpc UpdateCargoConstraint(CreateOrUpdateCargoConstraintsRequest) returns (CargoConstraintsObject);
-  rpc DeleteCargoConstraint(GetOrDeleteCargoConstraintsRequest) returns (CargoConstraintsObject);
   /* CARGO_TYPES */
   rpc GetCargoType(GetOrDeleteCargoTypesRequest) returns (CargoTypesObject);
   rpc GetListCargoTypes (google.protobuf.Empty) returns (ListCargoType);
   rpc CreateCargoType (CreateOrUpdateCargoTypesRequest) returns (CargoTypesObject);
   rpc UpdateCargoType (CreateOrUpdateCargoTypesRequest) returns (CargoTypesObject);
   rpc DeleteCargoType (GetOrDeleteCargoTypesRequest) returns (CargoTypesObject);
-  /* CONSTRAINTS */
-  rpc GetConstraint (GetOrDeleteConstraintsRequest) returns (ConstraintsObject);
-  rpc GetListConstraints (google.protobuf.Empty) returns (ListConstraints);
-  rpc CreateConstraint (CreateOrUpdateConstraintsRequest) returns (ConstraintsObject);
-  rpc UpdateConstraints(CreateOrUpdateConstraintsRequest) returns (ConstraintsObject);
-  rpc DeleteConstraint (GetOrDeleteConstraintsRequest) returns (ConstraintsObject);
-  /* CUSTOMERS */
-  rpc GetCustomer (GetOrDeleteCustomersRequest) returns (CustomersObject);
-  rpc GetListCustomers (google.protobuf.Empty) returns (ListCustomers);
-  rpc CreateCustomer (CreateOrUpdateCustomersRequest) returns (CustomersObject);
-  rpc UpdateCustomer (CreateOrUpdateCustomersRequest) returns (CustomersObject);
-  rpc DeleteCustomer (GetOrDeleteCustomersRequest) returns (CustomersObject);
   /* DRIVER_LICENCE */
   rpc GetDriverLicence (GetOrDeleteDriverLicenceRequest) returns (DriverLicenceObject);
   rpc GetListDriverLicences (google.protobuf.Empty) returns (ListDriverLicence);
@@ -56,18 +38,6 @@ service UserService{
   rpc CreateDriver (CreateOrUpdateDriversRequest) returns (DriversObject);
   rpc UpdateDriver (CreateOrUpdateDriversRequest) returns (DriversObject);
   rpc DeleteDriver (GetOrDeleteDriversRequest) returns (DriversObject);
-  /* ORDERS */
-  rpc GetOrder (GetOrDeleteOrdersRequest) returns (OrdersObject);
-  rpc GetListOrders (google.protobuf.Empty) returns (ListOrders);
-  rpc CreateOrder (CreateOrUpdateOrdersRequest) returns (OrdersObject);
-  rpc UpdateOrder (CreateOrUpdateOrdersRequest) returns (OrdersObject);
-  rpc DeleteOrder (GetOrDeleteOrdersRequest) returns (OrdersObject);
-  /* OWNERSHIPS */
-  rpc GetOwnership (GetOrDeleteOwnershipsRequest) returns (OwnershipsObject);
-  rpc GetListOwnerships (google.protobuf.Empty) returns (ListOwnerships);
-  rpc CreateOwnership (CreateOrUpdateOwnershipsRequest) returns (OwnershipsObject);
-  rpc UpdateOwnership (CreateOrUpdateOwnershipsRequest) returns (OwnershipsObject);
-  rpc DeleteOwnership (GetOrDeleteOwnershipsRequest) returns (OwnershipsObject);
   /* REQUESTS */
   rpc GetRequest (GetOrDeleteRequestObjRequest) returns (RequestsObject);
   rpc GetListRequests (google.protobuf.Empty) returns (ListRequest);
@@ -80,19 +50,6 @@ service UserService{
   rpc CreateRequisite (CreateOrUpdateRequisitesRequest) returns (RequisitesObject);
   rpc UpdateRequisite (CreateOrUpdateRequisitesRequest) returns (RequisitesObject);
   rpc DeleteRequisite (GetOrDeleteRequisitesRequest) returns (RequisitesObject);
-  /* TRANSPORTERS */
-  rpc GetTransporter (GetOrDeleteTransportersRequest) returns (TransportersObject);
-  rpc GetListTransporter (google.protobuf.Empty) returns (ListTransporters);
-  rpc CreateTransporter (CreateOrUpdateTransportersRequest) returns (TransportersObject);
-  rpc UpdateTransporter (CreateOrUpdateTransportersRequest) returns (TransportersObject);
-  rpc DeleteTransporter (GetOrDeleteTransportersRequest) returns (TransportersObject);
-  /* TRANSPORTERS_VEHICLES */
-  /*
-  rpc GetTransportersVehicle (GetOrDeleteTransportersVehiclesRequest) returns (TransportersVehiclesObject);
-  rpc GetListTransportersVehicles (google.protobuf.Empty) returns (ListTransportersVehicles);
-  rpc CreateTransportersVehicle (CreateOrUpdateTransportersVehiclesRequest) returns (TransportersVehiclesObject);
-  rpc UpdateTransportersVehicle (CreateOrUpdateTransportersVehiclesRequest) returns (TransportersVehiclesObject);
-  rpc DeleteTransportersVehicle (GetOrDeleteTransportersVehiclesRequest) returns (TransportersVehiclesObject);*/
   /* VEHICLES_TYPES */
   rpc GetVehiclesType (GetOrDeleteVehiclesTypesRequest) returns (VehiclesTypesObject);
   rpc GetListVehiclesTypes (google.protobuf.Empty) returns (ListVehiclesTypes);
@@ -105,12 +62,30 @@ service UserService{
   rpc CreateVehicle (CreateOrUpdateVehiclesRequest) returns (VehiclesObject);
   rpc UpdateVehicle (CreateOrUpdateVehiclesRequest) returns (VehiclesObject);
   rpc DeleteVehicle (GetOrDeleteVehiclesRequest) returns (VehiclesObject);
-  /* VEHICLES_TRANSPORTERS */
-  rpc GetVehiclesTransporter (GetOrDeleteVehiclesTransportersRequest) returns (VehiclesTransportersObject);
-  rpc GetListVehiclesTransporter (google.protobuf.Empty) returns (ListVehiclesTransporters);
-  rpc CreateVehiclesTransporter (CreateOrUpdateVehiclesTransportersRequest) returns (VehiclesTransportersObject);
-  rpc UpdateVehiclesTransporter (CreateOrUpdateVehiclesTransportersRequest) returns (VehiclesTransportersObject);
-  rpc DeleteVehiclesTransporter (GetOrDeleteVehiclesTransportersRequest) returns (VehiclesTransportersObject);
+  /* ROLES */
+  rpc GetRole (GetOrDeleteRoleRequest) returns (RolesObject);
+  rpc GetListRoles (google.protobuf.Empty) returns (ListRoles);
+  rpc CreateRole (CreateOrUpdateRoleRequest) returns (RolesObject);
+  rpc UpdateRole(CreateOrUpdateRoleRequest) returns (RolesObject);
+  rpc DeleteRole(GetOrDeleteRoleRequest) returns (RolesObject);
+  /* ROUTE_ACTIONS */
+  rpc GetRouteAction (GetOrDeleteRouteActionsRequest) returns (RouteActionsObject);
+  rpc GetListRouteActions (google.protobuf.Empty) returns (ListRouteActions);
+  rpc CreateRouteAction (CreateOrUpdateRouteActionsRequest) returns (RouteActionsObject);
+  rpc UpdateRouteAction (CreateOrUpdateRouteActionsRequest) returns (RouteActionsObject);
+  rpc DeleteRouteAction (GetOrDeleteRouteActionsRequest) returns (RouteActionsObject);
+  /* ROUTE */
+  rpc GetRoute (GetOrDeleteRouteObjectRequest) returns (RouteObject);
+  rpc GetListRoute (google.protobuf.Empty) returns (ListRouteObjects);
+  rpc CreateRoute (CreateOrUpdateRouteObjectRequest) returns (RouteObject);
+  rpc UpdateRoute (CreateOrUpdateRouteObjectRequest) returns (RouteObject);
+  rpc DeleteRoute (GetOrDeleteRouteObjectRequest) returns (RouteObject);
+  /* ROUTE_REQUESTS */
+  rpc GetRouteRequest (GetOrDeleteRoutesRequestsObjectRequest) returns (RouteObject);
+  rpc GetListRouteRequests (google.protobuf.Empty) returns (ListRouteObjects);
+  rpc CreateRouteRequest (CreateOrUpdateRoutesRequestsObjectRequest) returns (RouteObject);
+  rpc UpdateRouteRequest (CreateOrUpdateRoutesRequestsObjectRequest) returns (RouteObject);
+  rpc DeleteRouteRequest (GetOrDeleteRoutesRequestsObjectRequest) returns (RouteObject);
   /* LOGIN */
   rpc LoginUser(LoginRequest) returns (LoginReply);
 }
@@ -127,7 +102,7 @@ message CargoObject {
 	google.protobuf.DoubleValue volume = 4;
 	string name = 5;
 	google.protobuf.DoubleValue price = 6;
-	ListCargoConstraints constraintsObject = 7;
+	string constraints = 7;
 	CargoTypesObject cargoType = 8;
 }
 
@@ -143,31 +118,9 @@ message CreateOrUpdateCargoRequest{
 	CargoObject Cargo = 1;
 }
 
-/* * * * * * * * * * * * * *
-*	CARGO_CONSTRAINTS
-*		   CRUD
-* * * * * * * * * * * * * */
-
-message CargoConstraintsObject{
-	int32 id_constraint = 1;
-	int32 id_cargo = 2;
-}
-
-message ListCargoConstraints {
-	repeated CargoConstraintsObject CargoConstraints = 1;
-}
-
-message GetOrDeleteCargoConstraintsRequest{
-	int32 id_cargo = 1;
-	int32 id_constraint = 2;
-}
-
-message CreateOrUpdateCargoConstraintsRequest {
-	CargoConstraintsObject CargoConstraints = 1;
-}
 
 /* * * * * * * * * * * * * *
-*		CARGO_TYPES				???
+*		CARGO_TYPES				
 *			CRUD
 * * * * * * * * * * * * * */
 
@@ -187,52 +140,6 @@ message ListCargoType {
 message CreateOrUpdateCargoTypesRequest {
 	CargoTypesObject CargoType = 1;
 }
-
-/* * * * * * * * * * * * * *
-*		CONSTRAINTS
-*			CRUD
-* * * * * * * * * * * * * */
-
-message ConstraintsObject {
-	int32 id = 1;
-	string desc = 2;
-}
-
-message GetOrDeleteConstraintsRequest{
-	int32 id = 1;
-}
-
-message ListConstraints {
-	repeated ConstraintsObject Constraints = 1;
-}
-
-message CreateOrUpdateConstraintsRequest {
-	ConstraintsObject Constraint = 1;
-}
-
-/* * * * * * * * * * * * * *
-*		 CUSTOMERS
-*			CRUD
-* * * * * * * * * * * * * */
-
-message CustomersObject {
-	int32 id = 1;
-	int32 requisite = 2;
-	int32 cargo = 3;
-}
-
-message GetOrDeleteCustomersRequest {
-	int32 id = 1;
-}
-
-message ListCustomers {
-	repeated CustomersObject Customers = 1;
-}
-
-message CreateOrUpdateCustomersRequest {
-	CustomersObject Customer = 1;
-}
-
 
 /* * * * * * * * * * * * * *
 *		DRIVER_LICENCE
@@ -271,7 +178,7 @@ message DriversObject {
 	string surname = 3;
 	string patronymic = 4;
 	bool sanitation = 5;
-	int32 licence = 6;
+	DriverLicenceObject licence = 6;
 }
 
 message GetOrDeleteDriversRequest {
@@ -288,53 +195,6 @@ message CreateOrUpdateDriversRequest {
 
 
 /* * * * * * * * * * * * * *
-*	       ORDERS
-*			CRUD
-* * * * * * * * * * * * * */
-
-///TODO
-
-message OrdersObject {
-	int32 id = 1;
-	google.protobuf.Timestamp date = 2;
-	google.protobuf.Int32Value cargo = 3;
-}
-
-message GetOrDeleteOrdersRequest{
-	int32 id = 1;
-}
-
-message ListOrders{
-	repeated OrdersObject Orders = 1;
-}
-
-message CreateOrUpdateOrdersRequest{
-	OrdersObject Order = 1;
-}
-
-/* * * * * * * * * * * * * *
-*	      OWNERSHIPS
-*			CRUD
-* * * * * * * * * * * * * */
-
-message OwnershipsObject {
-	int32 id = 1;
-	string name = 2;
-}
-
-message GetOrDeleteOwnershipsRequest{
-	int32 id = 1;
-}
-
-message ListOwnerships{
-	repeated OwnershipsObject Ownership = 1;
-}
-
-message CreateOrUpdateOwnershipsRequest {
-	OwnershipsObject Ownership = 1;
-}
-
-/* * * * * * * * * * * * * *
 *	      REQUESTS
 *			CRUD
 * * * * * * * * * * * * * */
@@ -342,10 +202,17 @@ message CreateOrUpdateOwnershipsRequest {
 
 message RequestsObject {
 	int32 id = 1;
-	google.protobuf.Int32Value vehicle = 2;
+	VehiclesObject vehicle = 2;
 	google.protobuf.DoubleValue price = 3;
-	google.protobuf.Int32Value order = 4;
-	bool conditions = 5;
+	bool conditions = 4;
+	bool documents = 5;
+	google.protobuf.Timestamp creation_date = 6;
+	bool is_finished = 7;
+	CargoObject cargo = 8;
+	RequisitesObject customerReq = 9;
+	RequisitesObject transporterReq = 10;
+	ListRouteObjects routes = 11;
+	DriversObject driver = 12;
 }
 
 message GetOrDeleteRequestObjRequest {
@@ -368,11 +235,12 @@ message CreateOrUpdateRequestObjRequest {
 
 message RequisitesObject{
 	int32 id = 1;
-	google.protobuf.Int32Value ownership = 2;
+	string Name = 2;
 	string legal_address = 3;
 	string Inn = 4;
 	string ceo = 5;
 	google.protobuf.Int32Value pts = 6;
+	RolesObject role = 7;	
 }
 
 message GetOrDeleteRequisitesRequest{
@@ -386,52 +254,6 @@ message ListRequisites{
 message CreateOrUpdateRequisitesRequest {
 	RequisitesObject Requisite = 1;
 } 
-
-/* * * * * * * * * * * * * *
-*	    TRANSPORTERS
-*			CRUD
-* * * * * * * * * * * * * */
-
-
-message TransportersObject{
-	int32 id = 1;
-	string name = 2;
-}
-
-message GetOrDeleteTransportersRequest {
-	int32 id = 1;
-}
-
-message ListTransporters{
-	repeated TransportersObject Transporter = 1;
-}
-
-message CreateOrUpdateTransportersRequest {
-	TransportersObject Transporter = 1;
-}
-
-/* * * * * * * * * * * * * *
-*	TRANSPORTERS_VEHICLES
-*			CRUD
-* * * * * * * * * * * * * */
-
-
-message TransportersVehiclesObject{
-	int32 transporter = 1;
-	int32 vehicle = 2;
-}
-
-message GetOrDeleteTransportersVehiclesRequest {
-	int32 id = 1;
-}
-
-message ListTransportersVehicles{
-	repeated TransportersVehiclesObject TransportersVehicles = 1;
-}
-
-message CreateOrUpdateTransportersVehiclesRequest{
-	TransportersVehiclesObject TransportersVehicles = 1;
-}
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*
 *	    VEHICLES_TYPES
@@ -464,10 +286,10 @@ message CreateOrUpdateVehiclesTypesRequest{
 
 message VehiclesObject{
 	int32 id = 1;
-	int32 type = 2;
+	VehiclesTypesObject type = 2;
 	string number = 3;
-	int32 owner = 4;
-	int32 driver = 5;
+	RequisitesObject owner = 4;
+	string trailer_number = 5;
 }
 
 message GetOrDeleteVehiclesRequest {
@@ -483,27 +305,93 @@ message CreateOrUpdateVehiclesRequest {
 }
 
 /* * * * * * * * * * * * * *
-*	 VEHICLES_TRANSPORTERS
+*			ROLES
 *			CRUD
 * * * * * * * * * * * * * */
 
-
-message VehiclesTransportersObject{
-	int32 transporter = 1;
-	int32 vehicle = 2;
+message RolesObject{
+	int32 id = 1;
+	string name = 2;
 }
 
-message GetOrDeleteVehiclesTransportersRequest {
-	int32 id_transporter = 1;
-	int32 id_vehicle = 2;
+message GetOrDeleteRoleRequest{
+	int32 id = 1;
 }
 
-message ListVehiclesTransporters{
-	repeated VehiclesTransportersObject VehicleTransporters = 1;
+message ListRoles{
+	repeated RolesObject rolesObject = 1;
 }
 
-message CreateOrUpdateVehiclesTransportersRequest {
-	VehiclesTransportersObject VehicleTransporters = 1;
+message CreateOrUpdateRoleRequest{
+	RolesObject roleObject = 1;
+}
+
+/* * * * * * * * * * * * * *
+*		ROUTE_ACTIONS
+*			CRUD
+* * * * * * * * * * * * * */
+
+message RouteActionsObject{
+	int32 id = 1;
+	string action = 2;
+}
+
+message GetOrDeleteRouteActionsRequest{
+	int32 id = 1;
+}
+
+message ListRouteActions{
+	repeated RouteActionsObject routeActionsObject = 1;
+}
+
+message CreateOrUpdateRouteActionsRequest{
+	RouteActionsObject routeAction = 1;
+}
+
+/* * * * * * * * * * * * * *
+*			ROUTE
+*			CRUD
+* * * * * * * * * * * * * */
+
+message RouteObject{
+	int32 id = 1;
+	string address = 2;
+	RouteActionsObject action = 3;
+	google.protobuf.Timestamp action_date = 4;	
+}
+
+message GetOrDeleteRouteObjectRequest{
+	int32 id = 1;
+}
+
+message ListRouteObjects{
+	repeated RouteObject routeObjects = 1;
+}
+
+message CreateOrUpdateRouteObjectRequest{
+	RouteObject routeObject = 1;
+}
+
+/* * * * * * * * * * * * * *
+*		ROUTES_REQUESTS
+*			CRUD
+* * * * * * * * * * * * * */
+
+message RoutesRequestsObject{
+	int32 id_requests = 1;
+	int32 id_route = 2;
+}
+
+message GetOrDeleteRoutesRequestsObjectRequest{
+	int32 id = 1;
+}
+
+message ListRoutesRequestsObject{
+	repeated RoutesRequestsObject routesRequestsObject = 1;
+}
+
+message CreateOrUpdateRoutesRequestsObjectRequest{
+	RoutesRequestsObject routesRequestsObject = 1;
 }
 
 /* * * * * * * * * * * * * *

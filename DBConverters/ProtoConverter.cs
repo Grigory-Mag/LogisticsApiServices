@@ -1,8 +1,9 @@
 ﻿using LogisticsApiServices.DBPostModels;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ApiService
 {
- public sealed partial class CargoObject
+    public sealed partial class CargoObject
     {
         public static explicit operator Cargo(CargoObject cargoObject)
         {
@@ -14,26 +15,16 @@ namespace ApiService
                 Volume = cargoObject.Volume,
                 Name = cargoObject.Name,
                 Price = cargoObject.Price,
+                Constraints = cargoObject.Constraints == string.Empty ? null : cargoObject.Constraints,
+                TypeNavigation = cargoObject.CargoType == null ? null : (CargoType)cargoObject.CargoType
             };
         }
     }
- public sealed partial class ListCargo
+    public sealed partial class ListCargo
     {
 
     }
- public sealed partial class CargoConstraintsObject
-    {
-        public static explicit operator CargoConstraint(CargoConstraintsObject cargoConstraintObject)
-        {
-            return new CargoConstraint()
-            {
-                IdCargo = cargoConstraintObject.IdCargo,
-                IdConstraint = cargoConstraintObject.IdConstraint
-            };
-        }
-    } 
-
- public sealed partial class CargoTypesObject
+    public sealed partial class CargoTypesObject
     {
         public static explicit operator CargoType(CargoTypesObject cargoTypeObject)
         {
@@ -45,42 +36,17 @@ namespace ApiService
         }
     }
 
- public sealed partial class ConstraintsObject
-    {
-        public static explicit operator Constraint(ConstraintsObject constraint)
-        {
-            return new Constraint()
-            {
-                Id = constraint.Id,
-                Desc = constraint.Desc
-            };
-        }
-    }
-
- public sealed partial class ListConstraints
+    public sealed partial class ListConstraints
     {
 
     }
 
- public sealed partial class CustomersObject
-    {
-        public static explicit operator Customer(CustomersObject customer)
-        {
-            return new Customer()
-            {
-                Id = customer.Id,
-                Cargo = customer.Cargo,
-                Requisite = customer.Requisite
-            };
-        }
-    }
-
- public sealed partial class ListCustomers
+    public sealed partial class ListCustomers
     {
 
     }
 
- public sealed partial class DriverLicenceObject
+    public sealed partial class DriverLicenceObject
     {
         public static explicit operator DriverLicence(DriverLicenceObject driverLicence)
         {
@@ -94,12 +60,12 @@ namespace ApiService
         }
     }
 
- public sealed partial class ListDriverLicence
+    public sealed partial class ListDriverLicence
     {
 
     }
 
- public sealed partial class DriversObject
+    public sealed partial class DriversObject
     {
         public static explicit operator Driver(DriversObject driver)
         {
@@ -107,7 +73,7 @@ namespace ApiService
             {
                 Id = driver.Id,
                 Name = driver.Name,
-                Licence = driver.Licence,
+                LicenceNavigation = driver.Licence == null ? null : (DriverLicence)driver.Licence,
                 Patronymic = driver.Patronymic,
                 Sanitation = driver.Sanitation,
                 Surname = driver.Surname
@@ -115,130 +81,97 @@ namespace ApiService
         }
     }
 
- public sealed partial class ListDrivers
+    public sealed partial class ListDrivers
     {
 
     }
- 
- public sealed partial class OrdersObject
-    {
-        public static explicit operator Order(OrdersObject order)
-        {
-            return new Order()
-            {
-                Id = order.Id,
-                Cargo = order.Cargo,
-                Date = order.Date.ToDateTime(),
-            };
-        }
-    }
- 
- public sealed partial class ListOrders
+
+    public sealed partial class ListOrders
     {
 
     }
- 
- public sealed partial class OwnershipsObject
-    {
-        public static explicit operator Ownership(OwnershipsObject ownership)
-        {
-            return new Ownership()
-            {
-                Id = ownership.Id,
-                Name = ownership.Name,
-            };
-        }
-    }
- 
- public sealed partial class ListOwnerships
+
+
+    public sealed partial class ListOwnerships
     {
 
     }
- 
- public sealed partial class RequestsObject
+
+    public sealed partial class RequestsObject
     {
         public static explicit operator Request(RequestsObject request)
         {
             return new Request()
             {
                 Id = request.Id,
-                Conditions = request.Conditions,
-                Order = request.Order,
                 Price = request.Price,
-                Vehicle = request.Vehicle,
+                DriverNavigation = request.Driver == null ? null : (Driver)request.Driver,
+                VehicleNavigation = request.Vehicle == null ? null : (Vehicle)request.Vehicle,
+                CargoNavigation = request.Cargo == null ? null : (Cargo)request.Cargo,
+                CustomerNavigation = request.CustomerReq == null ? null : (Requisite)request.CustomerReq,
+                TransporterNavigation = request.TransporterReq == null ? null : (Requisite)request.TransporterReq,
             };
         }
     }
- 
- public sealed partial class ListRequest
+
+    public sealed partial class ListRequest
     {
 
     }
- 
- public sealed partial class RequisitesObject
+
+    public sealed partial class RequisitesObject
     {
         public static explicit operator Requisite(RequisitesObject requisite)
         {
             return new Requisite()
             {
                 Id = requisite.Id,
+                Name = requisite.Name,
                 Inn = requisite.Inn,
                 Ceo = requisite.Ceo,
                 LegalAddress = requisite.LegalAddress,
-                Ownership = requisite.Ownership,
-                Pts = requisite.Pts,
+                RoleNavigation = (Role)requisite.Role,
+                Pts = (int)requisite.Pts,
             };
         }
     }
- 
- public sealed partial class ListRequisites
+
+    public sealed partial class ListRequisites
     {
 
     }
- 
- public sealed partial class TransportersObject
-    {
-        public static explicit operator Transporter(TransportersObject requisite)
-        {
-            return new Transporter()
-            {
-                Id = requisite.Id,
-                Name = requisite.Name
-            };
-        }
-    }
- 
- public sealed partial class ListTransporters
+
+    public sealed partial class ListTransporters
     {
 
     }
- 
- public sealed partial class TransportersVehiclesObject
+
+    public sealed partial class TransportersVehiclesObject
     {
 
     }
- 
- public sealed partial class ListTransportersVehicles
+
+    public sealed partial class ListTransportersVehicles
     {
 
     }
- 
- public sealed partial class ListVehiclesTypes
+
+    public sealed partial class ListVehiclesTypes
     {
 
     }
- 
- public sealed partial class VehiclesObject
+
+    public sealed partial class VehiclesObject
     {
-        public static explicit operator Vehicle(VehiclesObject requisite)
+        public static explicit operator Vehicle(VehiclesObject vehicle)
         {
             return new Vehicle()
             {
-                Id = requisite.Id,
-                Driver = requisite.Driver,
-                Number = requisite.Number,
-                Owner = requisite.Owner,
-                Type = requisite.Type,
+                Id = vehicle.Id,
+                Number = vehicle.Number,
+                Owner = vehicle.Owner.Id,
+                Type = vehicle.Type.Id,
+                TrailerNumber = vehicle.TrailerNumber,
             };
         }
     }
@@ -259,22 +192,21 @@ namespace ApiService
     {
 
     }
- 
- public sealed partial class VehiclesTransportersObject
-    {
-        public static explicit operator VehiclesTransporter(VehiclesTransportersObject item)
-        {
-            return new VehiclesTransporter()
-            {
-                IdTransporter = item.Transporter,
-                IdVehicle = item.Vehicle,
-            };
-        }
-    }
- 
- public sealed partial class ListVehiclesTransporters
+
+    public sealed partial class ListVehiclesTransporters
     {
 
     }
- 
+
+    public partial class RolesObject
+    {
+        public static explicit operator Role(RolesObject role)
+        {
+            return new Role()
+            {
+                Id = role.Id,
+                Name = role.Name,
+            };
+        }
+    }
 }

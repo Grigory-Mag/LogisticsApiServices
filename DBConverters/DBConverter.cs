@@ -1,4 +1,5 @@
 ﻿using ApiService;
+using Azure.Core;
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,6 @@ namespace LogisticsApiServices.DBPostModels
     {
         public static explicit operator CargoObject(Cargo cargo)
         {
-            List <CargoConstraintsObject> cargoConstraintsObjectsList = new List <CargoConstraintsObject>();
-            cargo.CargoConstraints.ToList().ForEach(item => cargoConstraintsObjectsList.Add((CargoConstraintsObject)item));
-
-            ListCargoConstraints cargoConstraints = new ListCargoConstraints();
-            cargoConstraints.CargoConstraints.AddRange(cargoConstraintsObjectsList);
-
             return new CargoObject()
             {
                 Id = cargo.Id,
@@ -24,20 +19,8 @@ namespace LogisticsApiServices.DBPostModels
                 Volume = cargo.Volume,
                 Name = cargo.Name,
                 Price = cargo.Price,
-                ConstraintsObject = cargoConstraints,
-                CargoType = (CargoTypesObject)cargo.TypeNavigation
-            };
-        }
-    }
-
-    public partial class CargoConstraint
-    {
-        public static explicit operator CargoConstraintsObject (CargoConstraint cargoConstraint)
-        {
-            return new CargoConstraintsObject()
-            {
-                IdCargo = cargoConstraint.IdCargo,
-                IdConstraint = cargoConstraint.IdConstraint
+                Constraints = cargo.Constraints == null ? string.Empty : cargo.Constraints,
+                CargoType = cargo.TypeNavigation == null ? null : (CargoTypesObject)cargo.TypeNavigation
             };
         }
     }
@@ -54,31 +37,6 @@ namespace LogisticsApiServices.DBPostModels
         }
     }
 
-    public partial class Constraint
-    {
-        public static explicit operator ConstraintsObject(Constraint constraint)
-        {
-            return new ConstraintsObject()
-            {
-                Id = constraint.Id,
-                Desc = constraint.Desc
-            };
-        }
-    }
-
-    public partial class Customer
-    {
-        public static explicit operator CustomersObject(Customer customer)
-        {
-            return new CustomersObject()
-            {
-                Id = customer.Id,
-                Cargo = customer.Cargo,
-                Requisite = customer.Requisite
-            };
-        }
-    }
-
     public partial class Driver
     {
         public static explicit operator DriversObject(Driver driver)
@@ -87,10 +45,10 @@ namespace LogisticsApiServices.DBPostModels
             {
                 Id = driver.Id,
                 Name = driver.Name,
-                Licence = driver.Licence,
-                Patronymic = driver.Patronymic,
+                Licence = driver.LicenceNavigation == null ? null : (DriverLicenceObject)driver.LicenceNavigation,
+                Patronymic = driver.Patronymic == null ? string.Empty : driver.Patronymic,
                 Sanitation = driver.Sanitation,
-                Surname = driver.Surname
+                Surname = driver.Surname == null ? string.Empty : driver.Surname
             };
         }
     }
@@ -101,35 +59,10 @@ namespace LogisticsApiServices.DBPostModels
         {
             return new DriverLicenceObject()
             {
-                Id=driverLicence.Id,
+                Id = driverLicence.Id,
                 Series = driverLicence.Series,
                 Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(driverLicence.Date.ToUniversalTime()),
                 Number = driverLicence.Number
-            };
-        }
-    }
-
-    public partial class Order
-    {
-        public static explicit operator OrdersObject(Order order)
-        {
-            return new OrdersObject()
-            {
-                Id = order.Id,
-                Cargo = order.Cargo,
-                Date = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(order.Date.ToUniversalTime()),
-            };
-        }
-    }
-
-    public partial class Ownership
-    {
-        public static explicit operator OwnershipsObject(Ownership ownership)
-        {
-            return new OwnershipsObject()
-            {
-                Id = ownership.Id,
-                Name = ownership.Name,
             };
         }
     }
@@ -138,13 +71,22 @@ namespace LogisticsApiServices.DBPostModels
     {
         public static explicit operator RequestsObject(Request request)
         {
+            var routes = new ListRouteObjects();
+            var routesList = request.IdRoutes.ToList();
+            routesList.ForEach(item => routes.RouteObjects.Add((RouteObject)item));
             return new RequestsObject()
             {
                 Id = request.Id,
-                Conditions = request.Conditions,
-                Order = request.Order,
                 Price = request.Price,
-                Vehicle = request.Vehicle,
+                Driver = request.Driver == null ? null : (DriversObject)request.DriverNavigation,
+                Vehicle = (VehiclesObject)request.VehicleNavigation,
+                IsFinished = request.IsFinishied == null ? false : (bool)request.IsFinishied,
+                CreationDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(request.CreationDate.ToUniversalTime()),
+                Documents = request.DocumentsOriginal == null ? false : (bool)request.DocumentsOriginal,
+                Cargo = request.CargoNavigation == null ? null : (CargoObject)request.CargoNavigation,
+                CustomerReq = request.CustomerNavigation == null ? null : (RequisitesObject)request.CustomerNavigation,
+                TransporterReq = request.TransporterNavigation == null ? null : (RequisitesObject)request.TransporterNavigation,
+                Routes = routes,
             };
         }
     }
@@ -156,53 +98,27 @@ namespace LogisticsApiServices.DBPostModels
             return new RequisitesObject()
             {
                 Id = requisite.Id,
+                Name = requisite.Name,
                 Inn = requisite.Inn,
                 Ceo = requisite.Ceo,
                 LegalAddress = requisite.LegalAddress,
-                Ownership = requisite.Ownership,
+                Role = (RolesObject)requisite.RoleNavigation,
                 Pts = requisite.Pts,
-            };
-        }
-    }
-
-    public partial class Transporter
-    {
-        public static explicit operator TransportersObject(Transporter requisite)
-        {
-            return new TransportersObject()
-            {
-                Id = requisite.Id,
-                Name = requisite.Name
             };
         }
     }
 
     public partial class Vehicle
     {
-        /*
-        public Vehicle (Vehicle item)
-        {
-            Id = item.Id;
-            Type = item.Type;
-            Number = item.Number;
-            Owner = item.Owner;
-            Driver = item.Driver;
-
-            DriverNavigation = item.DriverNavigation;            
-            OwnerNavigation = item.OwnerNavigation;
-            TypeNavigation = item.TypeNavigation;
-            Requests = item.Requests;
-        }*/
-
         public static explicit operator VehiclesObject(Vehicle item)
         {
             return new VehiclesObject()
             {
                 Id = item.Id,
-                Driver = item.Driver,
                 Number = item.Number,
-                Owner = item.Owner,
-                Type = item.Type,
+                Owner = (RequisitesObject)item.OwnerNavigation,
+                Type = (VehiclesTypesObject)item.TypeNavigation,
+                TrailerNumber = item.TrailerNumber,
             };
         }
     }
@@ -219,14 +135,40 @@ namespace LogisticsApiServices.DBPostModels
         }
     }
 
-    public partial class VehiclesTransporter
+    public partial class Role
     {
-        public static explicit operator VehiclesTransportersObject(VehiclesTransporter item)
+        public static explicit operator RolesObject(Role role)
         {
-            return new VehiclesTransportersObject()
+            return new RolesObject()
             {
-                Transporter = item.IdTransporter,
-                Vehicle = item.IdVehicle,
+                Id = role.Id,
+                Name = role.Name,
+            };
+        }
+    }
+
+    public partial class Route
+    {
+        public static explicit operator RouteObject(Route route)
+        {
+            return new RouteObject()
+            {
+                Id = route.Id,
+                Address = route.Address,
+                ActionDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(route.ActionDate.ToUniversalTime()),
+                Action = (RouteActionsObject)route.ActionNavigation,
+            };
+        }
+    }
+
+    public partial class RouteAction
+    {
+        public static explicit operator RouteActionsObject(RouteAction route)
+        {
+            return new RouteActionsObject()
+            {
+                Id = route.Id,
+                Action = route.Action,
             };
         }
     }

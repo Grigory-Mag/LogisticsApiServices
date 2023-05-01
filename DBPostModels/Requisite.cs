@@ -7,17 +7,23 @@ public partial class Requisite
 {
     public int Id { get; set; }
 
-    public int? Ownership { get; set; }
+    public string LegalAddress { get; set; } = null!;
 
-    public string? LegalAddress { get; set; }
+    public string Inn { get; set; } = null!;
 
-    public string? Inn { get; set; }
+    public string Ceo { get; set; } = null!;
 
-    public string? Ceo { get; set; }
+    public int Pts { get; set; }
 
-    public int? Pts { get; set; }
+    public int Role { get; set; }
 
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
+    public string Name { get; set; } = null!;
 
-    public virtual Ownership? OwnershipNavigation { get; set; }
+    public virtual ICollection<Request> RequestCustomerNavigations { get; set; } = new List<Request>();
+
+    public virtual ICollection<Request> RequestTransporterNavigations { get; set; } = new List<Request>();
+
+    public virtual Role RoleNavigation { get; set; } = null!;
+
+    public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }

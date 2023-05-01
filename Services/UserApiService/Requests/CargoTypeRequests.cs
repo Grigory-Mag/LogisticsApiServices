@@ -41,20 +41,20 @@ namespace ApiService
 
         public override async Task<CargoTypesObject> CreateCargoType(CreateOrUpdateCargoTypesRequest request, ServerCallContext context)
         {
-            var cargoTypeObject = request.CargoType;
-            var cargoTypeDB = (CargoType)cargoTypeObject;
-            await dbContext.CargoTypes.AddAsync(cargoTypeDB);
+            var cargoType = (CargoType)request.CargoType;
+            await dbContext.CargoTypes.AddAsync(cargoType);
             await dbContext.SaveChangesAsync();
 
-            return await Task.FromResult(cargoTypeObject);
+            return await Task.FromResult(request.CargoType);
         }
 
         public override async Task<CargoTypesObject> UpdateCargoType(CreateOrUpdateCargoTypesRequest request, ServerCallContext context)
         {
-            var cargoTypeDB = await dbContext.CargoTypes.FindAsync(request.CargoType.Id);
-            if (cargoTypeDB == null)
+            //var cargoTypeDB = await dbContext.CargoTypes.FindAsync(request.CargoType.Id);
+            if (request.CargoType == null)
                 throw new RpcException(new Status(StatusCode.NotFound, "CargoType not found"));
-            cargoTypeDB = (CargoType)request.CargoType;
+            //cargoTypeDB = (CargoType)request.CargoType;
+            dbContext.CargoTypes.Update((CargoType)request.CargoType);
             await dbContext.SaveChangesAsync();
 
             return await Task.FromResult(request.CargoType);
