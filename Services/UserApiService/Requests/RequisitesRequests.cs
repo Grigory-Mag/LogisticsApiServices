@@ -42,11 +42,16 @@ namespace ApiService
 
         public override async Task<RequisitesObject> CreateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
         {
+            var reply = request.Requisite;
             var item = (Requisite)request.Requisite;
+            item.Role = item.RoleNavigation.Id;
+            item.RoleNavigation = null;
+
             await dbContext.Requisites.AddAsync(item);
             await dbContext.SaveChangesAsync();
 
-            return await Task.FromResult((RequisitesObject)item);
+            reply.Id = item.Id;
+            return await Task.FromResult(reply);
         }
 
         public override async Task<RequisitesObject> UpdateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)

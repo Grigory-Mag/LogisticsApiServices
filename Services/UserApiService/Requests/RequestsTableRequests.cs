@@ -69,11 +69,14 @@ namespace ApiService
 
         public override async Task<RequestsObject> CreateRequest(CreateOrUpdateRequestObjRequest request, ServerCallContext context)
         {
+            var reply = request.Requests;
+
             var item = (Request)request.Requests;
             await dbContext.Requests.AddAsync(item);
             await dbContext.SaveChangesAsync();
 
-            return await Task.FromResult((RequestsObject)item);
+            reply.Id = item.Id;
+            return await Task.FromResult(reply);
         }
 
         public override async Task<RequestsObject> UpdateRequest(CreateOrUpdateRequestObjRequest request, ServerCallContext context)

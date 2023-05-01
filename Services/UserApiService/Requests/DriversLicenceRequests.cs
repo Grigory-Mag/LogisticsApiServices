@@ -36,11 +36,13 @@ namespace ApiService
 
         public override async Task<DriverLicenceObject> CreateDriverLicence(CreateOrUpdateDriverLicenceRequest request, ServerCallContext context)
         {
+            var reply = request.DriverLicence;
             var driverLicence = (DriverLicence)request.DriverLicence;
             await dbContext.DriverLicences.AddAsync(driverLicence);
             await dbContext.SaveChangesAsync();
 
-            return await Task.FromResult((DriverLicenceObject)driverLicence);
+            reply.Id = driverLicence.Id;
+            return await Task.FromResult(reply);
         }
 
         public override async Task<DriverLicenceObject> UpdateDriverLicence(CreateOrUpdateDriverLicenceRequest request, ServerCallContext context)

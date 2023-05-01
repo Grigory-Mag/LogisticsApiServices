@@ -58,13 +58,16 @@ namespace ApiService
 
         public override async Task<CargoObject> CreateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
         {
+            var reply = request.Cargo;
             var cargo = (Cargo)request.Cargo;
             cargo.Type = cargo.TypeNavigation.Id;
             cargo.TypeNavigation = null;
 
             await dbContext.Cargos.AddAsync(cargo);
             await dbContext.SaveChangesAsync();
-            return await Task.FromResult(request.Cargo);
+
+            reply.Id = cargo.Id;
+            return await Task.FromResult(reply);
         }
 
         public override async Task<CargoObject> UpdateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)

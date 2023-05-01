@@ -102,7 +102,7 @@ namespace LogisticsApiServices.DBPostModels
                 Inn = requisite.Inn,
                 Ceo = requisite.Ceo,
                 LegalAddress = requisite.LegalAddress,
-                Role = (RolesObject)requisite.RoleNavigation,
+                Role = requisite.RoleNavigation == null ? null : (RolesObject)requisite.RoleNavigation,
                 Pts = requisite.Pts,
             };
         }

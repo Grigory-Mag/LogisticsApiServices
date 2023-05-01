@@ -130,8 +130,8 @@ namespace ApiService
                 Inn = requisite.Inn,
                 Ceo = requisite.Ceo,
                 LegalAddress = requisite.LegalAddress,
-                RoleNavigation = (Role)requisite.Role,
-                Pts = (int)requisite.Pts,
+                RoleNavigation = requisite.Role == null ? null : (Role)requisite.Role,
+                Pts = requisite.Pts == null ? 0 : (int)requisite.Pts,
             };
         }
     }
