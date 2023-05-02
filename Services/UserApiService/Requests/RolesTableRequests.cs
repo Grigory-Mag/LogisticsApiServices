@@ -42,11 +42,14 @@ namespace ApiService
 
         public override async Task<RolesObject> CreateRole(CreateOrUpdateRoleRequest request, ServerCallContext context)
         {
+            var reply = request.RoleObject;
             var role = (Role)request.RoleObject;
 
             await dbContext.Roles.AddAsync(role);
             await dbContext.SaveChangesAsync();
-            return await Task.FromResult(request.RoleObject);
+
+            reply.Id = role.Id;
+            return await Task.FromResult(reply);
         }
 
         public override async Task<RolesObject> UpdateRole(CreateOrUpdateRoleRequest request, ServerCallContext context)

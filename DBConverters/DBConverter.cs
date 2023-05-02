@@ -116,8 +116,8 @@ namespace LogisticsApiServices.DBPostModels
             {
                 Id = item.Id,
                 Number = item.Number,
-                Owner = (RequisitesObject)item.OwnerNavigation,
-                Type = (VehiclesTypesObject)item.TypeNavigation,
+                Owner = item.OwnerNavigation == null ? null : (RequisitesObject)item.OwnerNavigation,
+                Type = item.OwnerNavigation == null ? null : (VehiclesTypesObject)item.TypeNavigation,
                 TrailerNumber = item.TrailerNumber,
             };
         }

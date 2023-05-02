@@ -46,11 +46,13 @@ namespace ApiService
 
         public override async Task<VehiclesObject> CreateVehicle(CreateOrUpdateVehiclesRequest request, ServerCallContext context)
         {
+            var reply = request.Vehicle;
             var item = (Vehicle)request.Vehicle;
             await dbContext.Vehicles.AddAsync(item);
             await dbContext.SaveChangesAsync();
 
-            return await Task.FromResult((VehiclesObject)item);
+            reply.Id = item.Id;
+            return await Task.FromResult(reply);
         }
 
         public override async Task<VehiclesObject> UpdateVehicle(CreateOrUpdateVehiclesRequest request, ServerCallContext context)
