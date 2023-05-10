@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using LogisticsApiServices.DBPostModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiService
 {
@@ -14,6 +15,7 @@ namespace ApiService
      * =*=*=*=*=*=*=*=*=*=*=*=*=*
      */
 
+        [Authorize]
         public override async Task<CargoTypesObject> GetCargoType(GetOrDeleteCargoTypesRequest request, ServerCallContext context)
         {
             var cargoType = await dbContext.CargoTypes.FindAsync(request.Id);
@@ -24,6 +26,7 @@ namespace ApiService
             return await Task.FromResult(cargoTypeObject);
         }
 
+        [Authorize]
         public override async Task<ListCargoType> GetListCargoTypes(Empty request, ServerCallContext context)
         {
             var listCargoTypes = new ListCargoType();

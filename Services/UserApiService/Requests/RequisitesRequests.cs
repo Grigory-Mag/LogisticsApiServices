@@ -16,6 +16,7 @@ namespace ApiService
         public override async Task<RequisitesObject> GetRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
         {
             var item = dbContext.Requisites
+                .Include(item => item.TypeNavigation)
                 .Include(item => item.RoleNavigation)
                 .First(item => item.Id == request.Id);
             if (item == null)
@@ -28,6 +29,7 @@ namespace ApiService
         {
             var items = dbContext.Requisites
                 .Include(item => item.RoleNavigation)
+                .Include(item => item.TypeNavigation)
                 .ToList();
             var itemsReady = new List<RequisitesObject>();
             items.ForEach(val => itemsReady.Add((RequisitesObject)val));
@@ -45,6 +47,8 @@ namespace ApiService
             var reply = request.Requisite;
             var item = (Requisite)request.Requisite;
             item.Role = item.RoleNavigation.Id;
+            item.Type = item.TypeNavigation.Id;
+            item.TypeNavigation = null;
             item.RoleNavigation = null;
 
             await dbContext.Requisites.AddAsync(item);

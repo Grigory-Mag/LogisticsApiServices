@@ -29,6 +29,7 @@ namespace ApiService
             return await Task.FromResult(cargoObject);
         }
 
+        [Authorize]
         public override async Task<ListCargo> GetListCargo(Empty request, ServerCallContext context)
         {
             var data = dbContext.Cargos
@@ -56,6 +57,7 @@ namespace ApiService
             return await Task.FromResult(listCargoObjects);
         }
 
+        [Authorize]
         public override async Task<CargoObject> CreateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
         {
             var reply = request.Cargo;
@@ -70,6 +72,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<CargoObject> UpdateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
         {
             var cargo = (Cargo)request.Cargo;
@@ -89,6 +92,7 @@ namespace ApiService
         /// <returns>Returns a row of a table in .proto class</returns>
         /// <exception cref="RpcException">Throw exception when no data was found with requested id</exception>
 
+        [Authorize]
         public override async Task<CargoObject> DeleteCargo(GetOrDeleteCargoRequest request, ServerCallContext context)
         {
             var cargoDB = await dbContext.Cargos.FindAsync(request.Id);

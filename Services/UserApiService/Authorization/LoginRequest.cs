@@ -2,6 +2,10 @@
 using Grpc.Core;
 using LogisticsApiServices.Security;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace ApiService
@@ -24,16 +28,25 @@ namespace ApiService
             string config_val = jwt_config["Expiration"];
             var expiration = TimeSpan.FromSeconds(int.Parse(config_val));
 
-            //Claim[] claims = { new Claim(ClaimTypes.Role, "Student") };
-            return await Task.FromResult(new LoginReply
-            {
-                Token = JwtHelper.GetJwtTokenString(
+            var token = JwtHelper.GetJwtTokenString(
                     request.Data,
                     uniqueKey,
                     issuer,
                     audience,
-                    expiration)
-                    //claims)
+                    expiration);
+            //claims)
+
+            var data = dbContext.Users
+                .Include(rn => rn.RoleNavigation)
+                .First(item => item.Login == request.Data.Login);
+            data.Password = "";
+
+            //Claim[] claims = { new Claim(ClaimTypes.Role, "Student") };
+            return await Task.FromResult(new LoginReply
+            {
+                Token = token,
+                User = (LoginObject) data
+                
             });
 
         }
