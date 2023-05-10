@@ -69,8 +69,7 @@ namespace LogisticsApiServices.Security
             TimeSpan expiration,
             Claim[] additionalClaims = null)
         {
-//#error MAKE A REQUEST FOR DATABASE WITH USER DATA
-            DBContext db= new DBContext();
+            DBContext db = new DBContext();
             var data = db.Users.Where(item => item.Login == user_data.Login).ToList();
             if (data.Count > 0)
             

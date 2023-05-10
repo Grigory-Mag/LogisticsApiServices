@@ -50,6 +50,12 @@ service UserService{
   rpc CreateRequisite (CreateOrUpdateRequisitesRequest) returns (RequisitesObject);
   rpc UpdateRequisite (CreateOrUpdateRequisitesRequest) returns (RequisitesObject);
   rpc DeleteRequisite (GetOrDeleteRequisitesRequest) returns (RequisitesObject);
+  /* REQUISITE_TYPES */
+  rpc GetRequisiteType (GetOrDeleteRequisiteTypeRequest) returns (RequisiteTypeObject);
+  rpc GetListRequisiteTypes (google.protobuf.Empty) returns (ListRequisiteTypes);
+  rpc CreateRequisiteType (CreateOrUpdateRequisiteTypeRequest) returns (RequisiteTypeObject);
+  rpc UpdateRequisiteType (CreateOrUpdateRequisiteTypeRequest) returns (RequisiteTypeObject);
+  rpc DeleteRequisiteType (GetOrDeleteRequisiteTypeRequest) returns (RequisiteTypeObject);
   /* VEHICLES_TYPES */
   rpc GetVehiclesType (GetOrDeleteVehiclesTypesRequest) returns (VehiclesTypesObject);
   rpc GetListVehiclesTypes (google.protobuf.Empty) returns (ListVehiclesTypes);
@@ -86,6 +92,12 @@ service UserService{
   rpc CreateRouteRequest (CreateOrUpdateRoutesRequestsObjectRequest) returns (RouteObject);
   rpc UpdateRouteRequest (CreateOrUpdateRoutesRequestsObjectRequest) returns (RouteObject);
   rpc DeleteRouteRequest (GetOrDeleteRoutesRequestsObjectRequest) returns (RouteObject);
+  /* USER_ROLES */
+  rpc GetUserRole (GetOrDeleteUserRoleRequest) returns (UserRoleObject);
+  rpc GetListUserRoles (google.protobuf.Empty) returns (ListUserRoles);
+  rpc CreateUserRole (CreateOrUpdateUserRoleRequest) returns (UserRoleObject);
+  rpc UpdateUserRole (CreateOrUpdateUserRoleRequest) returns (UserRoleObject);
+  rpc DeleteUserRole (GetOrDeleteUserRoleRequest) returns (UserRoleObject);
   /* LOGIN */
   rpc LoginUser(LoginRequest) returns (LoginReply);
 }
@@ -241,6 +253,7 @@ message RequisitesObject{
 	string ceo = 5;
 	google.protobuf.Int32Value pts = 6;
 	RolesObject role = 7;	
+	RequisiteTypeObject type = 8;
 }
 
 message GetOrDeleteRequisitesRequest{
@@ -253,7 +266,29 @@ message ListRequisites{
 
 message CreateOrUpdateRequisitesRequest {
 	RequisitesObject Requisite = 1;
-} 
+}
+
+/* * * * * * * * * * * * * *
+*	    REQUISITES_TYPES
+*			CRUD
+* * * * * * * * * * * * * */
+
+message RequisiteTypeObject{
+	int32 id = 1;
+	string Name = 2;
+}
+
+message GetOrDeleteRequisiteTypeRequest{
+	int32 id = 1;
+}
+
+message ListRequisiteTypes{
+	repeated RequisiteTypeObject RequisiteType = 1;
+}
+
+message CreateOrUpdateRequisiteTypeRequest {
+	 RequisiteTypeObject RequisiteType = 1;
+}
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*
 *	    VEHICLES_TYPES
@@ -395,12 +430,37 @@ message CreateOrUpdateRoutesRequestsObjectRequest{
 }
 
 /* * * * * * * * * * * * * *
+*			USER_ROLES
+* * * * * * * * * * * * * */
+
+message UserRoleObject{
+	int32 id = 1;
+	string name = 2;
+}
+
+message GetOrDeleteUserRoleRequest{
+	int32 id = 1;
+}
+
+message ListUserRoles{
+	repeated UserRoleObject userRole = 1;
+}
+
+message CreateOrUpdateUserRoleRequest{
+	UserRoleObject userRole = 1;
+}
+
+/* * * * * * * * * * * * * *
 *			LOGIN
 * * * * * * * * * * * * * */
 
 message LoginObject{
 	string login = 1;
 	string password = 2;
+	string name = 3;
+	string surname = 4;
+	string patronymic = 5;
+	UserRoleObject userRole = 6;
 }
 
 message LoginRequest{
@@ -409,4 +469,9 @@ message LoginRequest{
 
 message LoginReply{
 	string token = 1;
+	LoginObject user = 2;
+}
+
+message GetUserRequest{
+	string login = 1;
 }

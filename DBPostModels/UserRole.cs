@@ -5,23 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LogisticsApiServices.DBPostModels;
 
-public partial class User
+public partial class UserRole
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    public string? Login { get; set; }
-
-    public string? Password { get; set; }
-
     public string? Name { get; set; }
 
-    public string? Surname { get; set; }
-
-    public string? Patronymic { get; set; }
-
-    public int? Role { get; set; }
-
-    public virtual UserRole? RoleNavigation { get; set; }
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

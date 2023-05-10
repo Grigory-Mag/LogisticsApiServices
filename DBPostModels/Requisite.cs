@@ -23,11 +23,15 @@ public partial class Requisite
 
     public string Name { get; set; } = null!;
 
+    public int? Type { get; set; }
+
     public virtual ICollection<Request> RequestCustomerNavigations { get; set; } = new List<Request>();
 
     public virtual ICollection<Request> RequestTransporterNavigations { get; set; } = new List<Request>();
 
     public virtual Role RoleNavigation { get; set; } = null!;
+
+    public virtual RequisitesType? TypeNavigation { get; set; }
 
     public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }

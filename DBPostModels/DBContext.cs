@@ -27,6 +27,8 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<Requisite> Requisites { get; set; }
 
+    public virtual DbSet<RequisitesType> RequisitesTypes { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<Route> Routes { get; set; }
@@ -34,6 +36,8 @@ public partial class DBContext : DbContext
     public virtual DbSet<RouteAction> RouteActions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<UserRole> UserRoles { get; set; }
 
     public virtual DbSet<Vehicle> Vehicles { get; set; }
 
@@ -197,11 +201,26 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Pts).HasColumnName("pts");
             entity.Property(e => e.Role).HasColumnName("role");
+            entity.Property(e => e.Type).HasColumnName("type");
 
             entity.HasOne(d => d.RoleNavigation).WithMany(p => p.Requisites)
                 .HasForeignKey(d => d.Role)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Requisites_Roles_id_fk");
+
+            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Requisites)
+                .HasForeignKey(d => d.Type)
+                .HasConstraintName("Requisites_Requisites_Types_id_fk");
+        });
+
+        modelBuilder.Entity<RequisitesType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Requisites_Types_pk");
+
+            entity.ToTable("Requisites_Types", "logistics_shema");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name).HasColumnName("name");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -257,8 +276,23 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Login).HasColumnName("login");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Password).HasColumnName("password");
-            entity.Property(e => e.Patroynymic).HasColumnName("patroynymic");
+            entity.Property(e => e.Patronymic).HasColumnName("patronymic");
+            entity.Property(e => e.Role).HasColumnName("role");
             entity.Property(e => e.Surname).HasColumnName("surname");
+
+            entity.HasOne(d => d.RoleNavigation).WithMany(p => p.Users)
+                .HasForeignKey(d => d.Role)
+                .HasConstraintName("Users_User_Roles_id_fk");
+        });
+
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("User_Roles_pk");
+
+            entity.ToTable("User_Roles", "logistics_shema");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name).HasColumnName("name");
         });
 
         modelBuilder.Entity<Vehicle>(entity =>

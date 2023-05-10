@@ -16,7 +16,7 @@ namespace ApiService
                 Name = cargoObject.Name,
                 Price = cargoObject.Price,
                 Constraints = cargoObject.Constraints == string.Empty ? null : cargoObject.Constraints,
-                TypeNavigation = cargoObject.CargoType == null ? null : (CargoType)cargoObject.CargoType
+                TypeNavigation = cargoObject.CargoType == null ? null : (CargoType)cargoObject.CargoType,
             };
         }
     }
@@ -132,6 +132,7 @@ namespace ApiService
                 LegalAddress = requisite.LegalAddress,
                 RoleNavigation = requisite.Role == null ? null : (Role)requisite.Role,
                 Pts = requisite.Pts == null ? 0 : (int)requisite.Pts,
+                TypeNavigation = requisite.Type == null ? null : (RequisitesType)requisite.Type,
             };
         }
     }
@@ -206,6 +207,46 @@ namespace ApiService
             {
                 Id = role.Id,
                 Name = role.Name,
+            };
+        }
+    }
+
+    public partial class RequisiteTypeObject
+    {
+        public static explicit operator RequisitesType(RequisiteTypeObject item)
+        {
+            return new RequisitesType()
+            {
+                Id = item.Id,
+                Name = item.Name,
+            };
+        }
+    }
+
+    public partial class UserRoleObject
+    {
+        public static explicit operator UserRole (UserRoleObject item)
+        {
+            return new UserRole()
+            {
+                Id = item.Id,
+                Name = item.Name,
+            };
+        }
+    }
+
+    public partial class LoginObject
+    {
+        public static explicit operator User (LoginObject item)
+        {
+            return new User()
+            {
+                Login = item.Login,
+                Name = item.Name,
+                Password = item.Password,
+                Patronymic = item.Patronymic,
+                Surname = item.Surname,
+                RoleNavigation = item.UserRole == null ? null : (UserRole)item.UserRole,
             };
         }
     }

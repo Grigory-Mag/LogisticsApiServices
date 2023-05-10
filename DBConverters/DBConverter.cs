@@ -104,6 +104,7 @@ namespace LogisticsApiServices.DBPostModels
                 LegalAddress = requisite.LegalAddress,
                 Role = requisite.RoleNavigation == null ? null : (RolesObject)requisite.RoleNavigation,
                 Pts = requisite.Pts,
+                Type = requisite.TypeNavigation == null ? null : (RequisiteTypeObject)requisite.TypeNavigation,
             };
         }
     }
@@ -169,6 +170,46 @@ namespace LogisticsApiServices.DBPostModels
             {
                 Id = route.Id,
                 Action = route.Action,
+            };
+        }
+    }
+
+    public partial class RequisitesType
+    {
+        public static explicit operator RequisiteTypeObject(RequisitesType item)
+        {
+            return new RequisiteTypeObject()
+            {
+                Id = item.Id,
+                Name = item.Name,
+            };
+        }
+    }
+
+    public partial class UserRole
+    {
+        public static explicit operator UserRoleObject(UserRole item)
+        {
+            return new UserRoleObject()
+            {
+                Id = item.Id,
+                Name = item.Name,
+            };
+        }
+    }
+
+    public partial class User
+    {
+        public static explicit operator LoginObject (User item)
+        {
+            return new LoginObject()
+            {
+                Login = item.Login,
+                Name = item.Name == null ? "" : item.Name,
+                Password = item.Password,
+                Patronymic = item.Patronymic == null ? "" : item.Patronymic,
+                Surname = item.Surname == null ? "" : item.Surname,
+                UserRole = item.RoleNavigation == null ? null : (UserRoleObject)item.RoleNavigation,
             };
         }
     }
