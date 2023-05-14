@@ -211,6 +211,32 @@ namespace ApiService
         }
     }
 
+    public partial class RouteObject
+    {
+        public static explicit operator LogisticsApiServices.DBPostModels.Route(RouteObject route)
+        {
+            return new LogisticsApiServices.DBPostModels.Route()
+            {
+                Id = route.Id,
+                Address = route.Address,
+                ActionDate = route.ActionDate.ToDateTime(),
+                ActionNavigation = route.Action == null ? null : (RouteAction)route.Action,
+            };
+        }
+    }
+
+    public partial class RouteActionsObject
+    {
+        public static explicit operator RouteAction(RouteActionsObject route)
+        {
+            return new RouteAction()
+            {
+                Id = route.Id,
+                Action = route.Action,
+            };
+        }
+    }
+
     public partial class RequisiteTypeObject
     {
         public static explicit operator RequisitesType(RequisiteTypeObject item)

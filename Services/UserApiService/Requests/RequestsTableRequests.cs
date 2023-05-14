@@ -70,8 +70,20 @@ namespace ApiService
         public override async Task<RequestsObject> CreateRequest(CreateOrUpdateRequestObjRequest request, ServerCallContext context)
         {
             var reply = request.Requests;
-
             var item = (Request)request.Requests;
+            item.Transporter = item.TransporterNavigation.Id;
+            item.Customer = item.CustomerNavigation.Id;
+            item.Cargo = item.CargoNavigation.Id;
+            item.Driver = item.DriverNavigation.Id;
+            item.Vehicle = item.VehicleNavigation.Id;
+
+            item.TransporterNavigation = null;
+            item.CustomerNavigation = null;
+            item.CargoNavigation = null;
+            item.DriverNavigation = null;
+            item.VehicleNavigation = null;
+            
+
             await dbContext.Requests.AddAsync(item);
             await dbContext.SaveChangesAsync();
 
