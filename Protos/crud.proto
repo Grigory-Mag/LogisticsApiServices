@@ -100,6 +100,10 @@ service UserService{
   rpc DeleteUserRole (GetOrDeleteUserRoleRequest) returns (UserRoleObject);
   /* LOGIN */
   rpc LoginUser(LoginRequest) returns (LoginReply);
+  rpc CreateUser(LoginRequest) returns (LoginObject);
+  rpc DeleteUser(LoginRequest) returns (LoginObject);
+  rpc UpdateUser(LoginRequest) returns (LoginObject);
+  rpc GetListUsers(google.protobuf.Empty) returns (ListLogins);
 }
 
 /* * * * * 
@@ -455,12 +459,13 @@ message CreateOrUpdateUserRoleRequest{
 * * * * * * * * * * * * * */
 
 message LoginObject{
-	string login = 1;
-	string password = 2;
-	string name = 3;
-	string surname = 4;
-	string patronymic = 5;
-	UserRoleObject userRole = 6;
+	int32 Id = 1;
+	string login = 2;
+	string password = 3;
+	string name = 4;
+	string surname = 5;
+	string patronymic = 6;
+	UserRoleObject userRole = 7;
 }
 
 message LoginRequest{
@@ -474,4 +479,8 @@ message LoginReply{
 
 message GetUserRequest{
 	string login = 1;
+}
+
+message ListLogins{
+	repeated LoginObject Logins = 1;
 }

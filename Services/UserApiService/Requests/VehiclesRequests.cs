@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
@@ -13,6 +14,7 @@ namespace ApiService
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
+        [Authorize]
         public override async Task<VehiclesObject> GetVehicle(GetOrDeleteVehiclesRequest request, ServerCallContext context)
         {
             var item = dbContext.Vehicles
@@ -26,6 +28,7 @@ namespace ApiService
             return await Task.FromResult((VehiclesObject)item);
         }
 
+        [Authorize]
         public override async Task<ListVehicles> GetListVehicles(Empty request, ServerCallContext context)
         {
             var items = dbContext.Vehicles
@@ -44,6 +47,7 @@ namespace ApiService
             return await Task.FromResult(listItems);
         }
 
+        [Authorize]
         public override async Task<VehiclesObject> CreateVehicle(CreateOrUpdateVehiclesRequest request, ServerCallContext context)
         {
             var reply = request.Vehicle;
@@ -55,6 +59,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<VehiclesObject> UpdateVehicle(CreateOrUpdateVehiclesRequest request, ServerCallContext context)
         {
             //var item = await dbContext.Vehicles.FindAsync(request.Vehicle.Id);
@@ -66,6 +71,7 @@ namespace ApiService
             return await Task.FromResult(request.Vehicle);
         }
 
+        [Authorize]
         public override async Task<VehiclesObject> DeleteVehicle(GetOrDeleteVehiclesRequest request, ServerCallContext context)
         {
             var item = await dbContext.Vehicles.FindAsync(request.Id);

@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
@@ -13,6 +14,7 @@ namespace ApiService
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
+        [Authorize]
         public override async Task<DriversObject> GetDriver(GetOrDeleteDriversRequest request, ServerCallContext context)
         {
             var driver = dbContext.Drivers
@@ -24,6 +26,7 @@ namespace ApiService
             return await Task.FromResult((DriversObject)driver);
         }
 
+        [Authorize]
         public override async Task<ListDrivers> GetListDrivers(Empty request, ServerCallContext context)
         {
             var drivers = dbContext.Drivers
@@ -37,6 +40,7 @@ namespace ApiService
             return await Task.FromResult(listDrivers);
         }
 
+        [Authorize]
         public override async Task<DriversObject> CreateDriver(CreateOrUpdateDriversRequest request, ServerCallContext context)
         {
             var reply = request.Driver;
@@ -51,6 +55,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<DriversObject> UpdateDriver(CreateOrUpdateDriversRequest request, ServerCallContext context)
         {
             //var driver = await dbContext.Drivers.FindAsync(request.Driver.Id);
@@ -62,6 +67,7 @@ namespace ApiService
             return await Task.FromResult(request.Driver);
         }
 
+        [Authorize]
         public override async Task<DriversObject> DeleteDriver(GetOrDeleteDriversRequest request, ServerCallContext context)
         {
             var driver = await dbContext.Drivers.FindAsync(request.Id);

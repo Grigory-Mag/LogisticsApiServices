@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
@@ -14,6 +15,7 @@ namespace ApiService
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
+        [Authorize]
         public override async Task<RouteObject> GetRoute(GetOrDeleteRouteObjectRequest request, ServerCallContext context)
         {
             var item = dbContext.Routes
@@ -26,6 +28,7 @@ namespace ApiService
             return await Task.FromResult((RouteObject)item);
         }
 
+        [Authorize]
         public override async Task<ListRouteObjects> GetListRoute(Empty request, ServerCallContext context)
         {
             var item = dbContext.Routes
@@ -40,6 +43,7 @@ namespace ApiService
             return await Task.FromResult(listItems);
         }
 
+        [Authorize]
         public override async Task<RouteObject> CreateRoute(CreateOrUpdateRouteObjectRequest request, ServerCallContext context)
         {
             var reply = request.RouteObject;
@@ -54,6 +58,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<RouteObject> UpdateRoute(CreateOrUpdateRouteObjectRequest request, ServerCallContext context)
         {
             if (request.RouteObject == null)
@@ -64,6 +69,7 @@ namespace ApiService
             return await Task.FromResult(request.RouteObject);
         }
 
+        [Authorize]
         public override async Task<RouteObject> DeleteRoute(GetOrDeleteRouteObjectRequest request, ServerCallContext context)
         {
             var route = await dbContext.Routes.FindAsync(request.Id);

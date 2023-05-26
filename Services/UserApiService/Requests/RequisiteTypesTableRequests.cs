@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
@@ -13,6 +14,7 @@ namespace ApiService
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
+        [Authorize]
         public override async Task<RequisiteTypeObject> GetRequisiteType(GetOrDeleteRequisiteTypeRequest request, ServerCallContext context)
         {
             var item = dbContext.RequisitesTypes
@@ -23,6 +25,7 @@ namespace ApiService
             return await Task.FromResult((RequisiteTypeObject)item);
         }
 
+        [Authorize]
         public override async Task<ListRequisiteTypes> GetListRequisiteTypes(Empty request, ServerCallContext context)
         {
             var items = dbContext.RequisitesTypes
@@ -38,6 +41,7 @@ namespace ApiService
             return await Task.FromResult(listItems);
         }
 
+        [Authorize]
         public override async Task<RequisiteTypeObject> CreateRequisiteType(CreateOrUpdateRequisiteTypeRequest request, ServerCallContext context)
         {
             var reply = request.RequisiteType;
@@ -50,6 +54,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<RequisiteTypeObject> UpdateRequisiteType(CreateOrUpdateRequisiteTypeRequest request, ServerCallContext context)
         {
             //var item = await dbContext.Requisites.FindAsync(request.Requisite.Id);
@@ -61,6 +66,7 @@ namespace ApiService
             return await Task.FromResult(request.RequisiteType);
         }
 
+        [Authorize]
         public override async Task<RequisiteTypeObject> DeleteRequisiteType(GetOrDeleteRequisiteTypeRequest request, ServerCallContext context)
         {
             var item = await dbContext.RequisitesTypes.FindAsync(request.Id);

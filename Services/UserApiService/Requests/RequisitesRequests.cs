@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
@@ -13,6 +14,7 @@ namespace ApiService
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
+        [Authorize]
         public override async Task<RequisitesObject> GetRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
         {
             var item = dbContext.Requisites
@@ -25,6 +27,7 @@ namespace ApiService
             return await Task.FromResult((RequisitesObject)item);
         }
 
+        [Authorize]
         public override async Task<ListRequisites> GetListRequisites(Empty request, ServerCallContext context)
         {
             var items = dbContext.Requisites
@@ -42,6 +45,7 @@ namespace ApiService
             return await Task.FromResult(listItems);
         }
 
+        [Authorize]
         public override async Task<RequisitesObject> CreateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
         {
             var reply = request.Requisite;
@@ -58,6 +62,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<RequisitesObject> UpdateRequisite(CreateOrUpdateRequisitesRequest request, ServerCallContext context)
         {
             //var item = await dbContext.Requisites.FindAsync(request.Requisite.Id);
@@ -69,6 +74,7 @@ namespace ApiService
             return await Task.FromResult(request.Requisite);
         }
 
+        [Authorize]
         public override async Task<RequisitesObject> DeleteRequisite(GetOrDeleteRequisitesRequest request, ServerCallContext context)
         {
             var item = await dbContext.Requisites.FindAsync(request.Id);

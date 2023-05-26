@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiService
@@ -13,6 +14,7 @@ namespace ApiService
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
+        [Authorize]
         public override async Task<RouteActionsObject> GetRouteAction(GetOrDeleteRouteActionsRequest request, ServerCallContext context)
         {
             var item = dbContext.RouteActions
@@ -24,6 +26,7 @@ namespace ApiService
             return await Task.FromResult((RouteActionsObject)item);
         }
 
+        [Authorize]
         public override async Task<ListRouteActions> GetListRouteActions(Empty request, ServerCallContext context)
         {
             var item = dbContext.RouteActions.ToList();
@@ -36,6 +39,7 @@ namespace ApiService
             return await Task.FromResult(listItems);
         }
 
+        [Authorize]
         public override async Task<RouteActionsObject> CreateRouteAction(CreateOrUpdateRouteActionsRequest request, ServerCallContext context)
         {
             var reply = request.RouteAction;
@@ -48,6 +52,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<RouteActionsObject> UpdateRouteAction(CreateOrUpdateRouteActionsRequest request, ServerCallContext context)
         {
             if (request.RouteAction == null)
@@ -58,6 +63,7 @@ namespace ApiService
             return await Task.FromResult(request.RouteAction);
         }
 
+        [Authorize]
         public override async Task<RouteActionsObject> DeleteRouteAction(GetOrDeleteRouteActionsRequest request, ServerCallContext context)
         {
             var route = await dbContext.RouteActions.FindAsync(request.Id);

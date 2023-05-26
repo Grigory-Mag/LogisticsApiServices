@@ -36,10 +36,28 @@ namespace ApiService
                     expiration);
             //claims)
 
-            var data = dbContext.Users
-                .Include(rn => rn.RoleNavigation)
-                .First(item => item.Login == request.Data.Login);
-            data.Password = "";
+            var data = new User()
+            {
+                Id = -1,
+                Login = "none",
+                Name = "none",
+                Password = "none",
+                Patronymic = "none",
+                Surname = "none",
+            };
+            try
+            {
+
+
+                data = dbContext.Users
+                    .Include(rn => rn.RoleNavigation)
+                    .First(item => item.Login == request.Data.Login);
+                data.Password = "";
+            }
+            catch (Exception ex) 
+            {
+                token = "Invalid data";
+            }
 
             //Claim[] claims = { new Claim(ClaimTypes.Role, "Student") };
             return await Task.FromResult(new LoginReply

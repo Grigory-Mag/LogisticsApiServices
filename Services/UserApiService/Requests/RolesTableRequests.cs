@@ -15,6 +15,7 @@ namespace ApiService
         * --- CARGO TABLE ---
         * =*=*=*=*=*=*=*=*=*=*=*=*=*
         */
+
         [Authorize]
         public override async Task<RolesObject> GetRole(GetOrDeleteRoleRequest request, ServerCallContext context)
         {
@@ -25,6 +26,7 @@ namespace ApiService
             return await Task.FromResult((RolesObject)role);
         }
 
+        [Authorize]
         public override async Task<ListRoles> GetListRoles(Empty request, ServerCallContext context)
         {
             var data = dbContext.Roles.ToList();
@@ -40,6 +42,7 @@ namespace ApiService
             return await Task.FromResult(listCargoObjects);
         }
 
+        [Authorize]
         public override async Task<RolesObject> CreateRole(CreateOrUpdateRoleRequest request, ServerCallContext context)
         {
             var reply = request.RoleObject;
@@ -52,6 +55,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<RolesObject> UpdateRole(CreateOrUpdateRoleRequest request, ServerCallContext context)
         {
             var role = (Role)request.RoleObject;
@@ -71,6 +75,7 @@ namespace ApiService
         /// <returns>Returns a row of a table in .proto class</returns>
         /// <exception cref="RpcException">Throw exception when no data was found with requested id</exception>
 
+        [Authorize]
         public override async Task<RolesObject> DeleteRole (GetOrDeleteRoleRequest request, ServerCallContext context)
         {
             var roleDB = await dbContext.Roles.FindAsync(request.Id);

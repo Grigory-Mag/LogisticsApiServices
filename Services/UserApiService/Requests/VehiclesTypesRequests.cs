@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiService
 {
@@ -12,6 +13,7 @@ namespace ApiService
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
 
+        [Authorize]
         public override async Task<VehiclesTypesObject> GetVehiclesType(GetOrDeleteVehiclesTypesRequest request, ServerCallContext context)
         {
             var item = await dbContext.VehicleTypes.FindAsync(request.Id);
@@ -21,6 +23,7 @@ namespace ApiService
             return await Task.FromResult((VehiclesTypesObject)item);
         }
 
+        [Authorize]
         public override async Task<ListVehiclesTypes> GetListVehiclesTypes(Empty request, ServerCallContext context)
         {
             var listItems = new ListVehiclesTypes();
@@ -34,6 +37,7 @@ namespace ApiService
             return await Task.FromResult(listItems);
         }
 
+        [Authorize]
         public override async Task<VehiclesTypesObject> CreateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
         {
             var reply = request.VehiclesTypes;
@@ -45,6 +49,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<VehiclesTypesObject> UpdateVehiclesType(CreateOrUpdateVehiclesTypesRequest request, ServerCallContext context)
         {            
             if (request.VehiclesTypes == null)
@@ -55,6 +60,7 @@ namespace ApiService
             return await Task.FromResult(request.VehiclesTypes);
         }
 
+        [Authorize]
         public override async Task<VehiclesTypesObject> DeleteVehiclesType(GetOrDeleteVehiclesTypesRequest request, ServerCallContext context)
         {
             var item = await dbContext.VehicleTypes.FindAsync(request.Id);

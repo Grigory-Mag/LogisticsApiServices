@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiService
 {
@@ -11,7 +12,7 @@ namespace ApiService
 * --- DRIVER LICENCE TABLE ---
 * =*=*=*=*=*=*=*=*=*=*=*=*=*
 */
-
+        [Authorize]
         public override async Task<DriverLicenceObject> GetDriverLicence(GetOrDeleteDriverLicenceRequest request, ServerCallContext context)
         {
             var driverLicence = await dbContext.DriverLicences.FindAsync(request.Id);
@@ -21,6 +22,7 @@ namespace ApiService
             return await Task.FromResult((DriverLicenceObject)driverLicence);
         }
 
+        [Authorize]
         public override async Task<ListDriverLicence> GetListDriverLicences(Empty request, ServerCallContext context)
         {
             var listDriversLicence = new ListDriverLicence();
@@ -34,6 +36,7 @@ namespace ApiService
             return await Task.FromResult(listDriversLicence);
         }
 
+        [Authorize]
         public override async Task<DriverLicenceObject> CreateDriverLicence(CreateOrUpdateDriverLicenceRequest request, ServerCallContext context)
         {
             var reply = request.DriverLicence;
@@ -45,6 +48,7 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        [Authorize]
         public override async Task<DriverLicenceObject> UpdateDriverLicence(CreateOrUpdateDriverLicenceRequest request, ServerCallContext context)
         {
             //var driverLicence = await dbContext.DriverLicences.FindAsync(request.DriverLicence.Id);
@@ -56,6 +60,7 @@ namespace ApiService
             return await Task.FromResult(request.DriverLicence);
         }
 
+        [Authorize]
         public override async Task<DriverLicenceObject> DeleteDriverLicence(GetOrDeleteDriverLicenceRequest request, ServerCallContext context)
         {
             var driverLicence = await dbContext.DriverLicences.FindAsync(request.Id);      

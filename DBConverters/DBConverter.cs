@@ -73,13 +73,14 @@ namespace LogisticsApiServices.DBPostModels
         {
             var routes = new ListRouteObjects();
             var routesList = request.IdRoutes.ToList();
-            routesList.ForEach(item => routes.RouteObjects.Add((RouteObject)item));
+            if (routesList.Count > 0) 
+                routesList.ForEach(item => routes.RouteObjects.Add((RouteObject)item));
             return new RequestsObject()
             {
                 Id = request.Id,
                 Price = request.Price,
-                Driver = request.Driver == null ? null : (DriversObject)request.DriverNavigation,
-                Vehicle = (VehiclesObject)request.VehicleNavigation,
+                Driver = request.DriverNavigation == null ? null : (DriversObject)request.DriverNavigation,
+                Vehicle = request.VehicleNavigation == null ? null : (VehiclesObject)request.VehicleNavigation,
                 IsFinished = request.IsFinishied == null ? false : (bool)request.IsFinishied,
                 CreationDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(request.CreationDate.ToUniversalTime()),
                 Documents = request.DocumentsOriginal == null ? false : (bool)request.DocumentsOriginal,
@@ -166,11 +167,14 @@ namespace LogisticsApiServices.DBPostModels
     {
         public static explicit operator RouteActionsObject(RouteAction route)
         {
-            return new RouteActionsObject()
-            {
-                Id = route.Id,
-                Action = route.Action,
-            };
+            if (route != null)
+                return new RouteActionsObject()
+                {
+                    Id = route.Id,
+                    Action = route.Action,
+                };
+            else
+                return null;
         }
     }
 
@@ -204,6 +208,7 @@ namespace LogisticsApiServices.DBPostModels
         {
             return new LoginObject()
             {
+                Id = item.Id,
                 Login = item.Login,
                 Name = item.Name == null ? "" : item.Name,
                 Password = item.Password,

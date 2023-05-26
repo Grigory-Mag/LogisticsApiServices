@@ -47,7 +47,6 @@ public partial class DBContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-
             var configurationBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);

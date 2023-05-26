@@ -81,42 +81,29 @@ namespace ApiService
         }
     }
 
-    public sealed partial class ListDrivers
-    {
-
-    }
-
-    public sealed partial class ListOrders
-    {
-
-    }
-
-
-    public sealed partial class ListOwnerships
-    {
-
-    }
-
     public sealed partial class RequestsObject
     {
         public static explicit operator Request(RequestsObject request)
         {
+            var idRoutes = new List<LogisticsApiServices.DBPostModels.Route>();
+            if (request.Routes != null)
+                request.Routes.RouteObjects.ToList().ForEach(x => idRoutes.Add((LogisticsApiServices.DBPostModels.Route)x));
+
             return new Request()
             {
                 Id = request.Id,
                 Price = request.Price,
+                CreationDate = request.CreationDate.ToDateTime(),
+                IsFinishied = request.IsFinished,
+                DocumentsOriginal = request.Documents,
                 DriverNavigation = request.Driver == null ? null : (Driver)request.Driver,
                 VehicleNavigation = request.Vehicle == null ? null : (Vehicle)request.Vehicle,
                 CargoNavigation = request.Cargo == null ? null : (Cargo)request.Cargo,
                 CustomerNavigation = request.CustomerReq == null ? null : (Requisite)request.CustomerReq,
                 TransporterNavigation = request.TransporterReq == null ? null : (Requisite)request.TransporterReq,
+                IdRoutes = idRoutes == null ? null : idRoutes,
             };
         }
-    }
-
-    public sealed partial class ListRequest
-    {
-
     }
 
     public sealed partial class RequisitesObject
@@ -135,31 +122,6 @@ namespace ApiService
                 TypeNavigation = requisite.Type == null ? null : (RequisitesType)requisite.Type,
             };
         }
-    }
-
-    public sealed partial class ListRequisites
-    {
-
-    }
-
-    public sealed partial class ListTransporters
-    {
-
-    }
-
-    public sealed partial class TransportersVehiclesObject
-    {
-
-    }
-
-    public sealed partial class ListTransportersVehicles
-    {
-
-    }
-
-    public sealed partial class ListVehiclesTypes
-    {
-
     }
 
     public sealed partial class VehiclesObject
@@ -187,16 +149,6 @@ namespace ApiService
                 Name = item.Name,
             };
         }
-    }
-
-    public sealed partial class ListVehicles
-    {
-
-    }
-
-    public sealed partial class ListVehiclesTransporters
-    {
-
     }
 
     public partial class RolesObject
@@ -267,6 +219,7 @@ namespace ApiService
         {
             return new User()
             {
+                Id= item.Id,
                 Login = item.Login,
                 Name = item.Name,
                 Password = item.Password,
