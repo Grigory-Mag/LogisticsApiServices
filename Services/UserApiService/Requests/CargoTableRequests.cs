@@ -16,6 +16,14 @@ namespace ApiService
         * --- CARGO TABLE ---
         * =*=*=*=*=*=*=*=*=*=*=*=*=*
         */
+
+        /// <summary>
+        /// Implementation of a get function for cargo table, declared in crud.proto file.
+        /// </summary>
+        /// <param name="request">Requested id</param>
+        /// <param name="context"></param>
+        /// <returns>Returns a row of a table in .proto class</returns>
+        /// <exception cref="RpcException">Throw exception when no data was found with requested id</exception>
         [Authorize]
         public override async Task<CargoObject> GetCargo(GetOrDeleteCargoRequest request, ServerCallContext context)
         {
@@ -29,6 +37,13 @@ namespace ApiService
             return await Task.FromResult(cargoObject);
         }
 
+        /// <summary>
+        /// Implementation of a getList function for cargo table, declared in crud.proto file.
+        /// </summary>
+        /// <param name="request">Requested id</param>
+        /// <param name="context"></param>
+        /// <returns>Returns a list of rows in .proto class</returns>
+        /// <exception cref="RpcException">Throw exception when no data was found with requested id</exception>
         [Authorize]
         public override async Task<ListCargo> GetListCargo(Empty request, ServerCallContext context)
         {
@@ -57,6 +72,13 @@ namespace ApiService
             return await Task.FromResult(listCargoObjects);
         }
 
+        /// <summary>
+        /// Implementation of a create function for cargo table, declared in crud.proto file.
+        /// </summary>
+        /// <param name="request">Requested id</param>
+        /// <param name="context"></param>
+        /// <returns>Returns a row of a table in .proto class</returns>
+        /// <exception cref="RpcException">Throw exception when no data was found with requested id</exception>
         [Authorize]
         public override async Task<CargoObject> CreateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
         {
@@ -72,6 +94,13 @@ namespace ApiService
             return await Task.FromResult(reply);
         }
 
+        /// <summary>
+        /// Implementation of an update function for cargo table, declared in crud.proto file.
+        /// </summary>
+        /// <param name="request">Requested id</param>
+        /// <param name="context"></param>
+        /// <returns>Returns a row of a table in .proto class</returns>
+        /// <exception cref="RpcException">Throw exception when no data was found with requested id</exception>
         [Authorize]
         public override async Task<CargoObject> UpdateCargo(CreateOrUpdateCargoRequest request, ServerCallContext context)
         {

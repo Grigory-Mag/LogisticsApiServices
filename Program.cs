@@ -18,6 +18,8 @@ builder.Services.AddDbContext<DBContext>();
 builder.Services.AddGrpc();
 
 
+// Adding an Authentication Service
+// Getting setting for JwtToken from app settings
 builder.Services.AddAuthentication(auth =>
 {
     auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -39,10 +41,7 @@ builder.Services.AddAuthentication(auth =>
     };
 });
 
-
-
 builder.Services.AddAuthorization();
-
 
 var app = builder.Build();
 
@@ -50,25 +49,11 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2Support", true);
 
-
 app.Urls.Add("http://*:8008");
-//app.UseAuthentication();
-
-//app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllers();
-//});
-
-
-// Configure the HTTP request pipeline.
-//app.MapGrpcService<GreeterService>();
-
-//app.UseRouting();
 app.MapGrpcService<UserApiService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

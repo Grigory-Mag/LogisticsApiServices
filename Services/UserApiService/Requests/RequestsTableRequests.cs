@@ -147,8 +147,6 @@ namespace ApiService
             trackedItem.DocumentsOriginal = item.DocumentsOriginal;
             trackedItem.IdRoutes.Clear();
             
-            //dbContext.Requests.Update(trackedItem);
-            //dbContext.Routes.UpdateRange(idRoutes);
             await dbContext.SaveChangesAsync();
             dbContext = new DBContext();
             trackedItem = dbContext.Requests.Where(x => x.Id == item.Id).Include(rn => rn.IdRoutes).First();

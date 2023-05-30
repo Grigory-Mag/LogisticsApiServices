@@ -51,7 +51,7 @@ public partial class DBContext : DbContext
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
             IConfiguration _configuration = configurationBuilder.Build();
-            var connection = _configuration.GetConnectionString("PostgresLocal");
+            var connection = _configuration.GetConnectionString("Postgres");
 
             optionsBuilder.UseNpgsql(connection);
 
