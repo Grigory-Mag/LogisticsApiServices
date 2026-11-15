@@ -33,6 +33,11 @@
 2. Выполните скрипт `Database/init_db.sql` через **DataGrip**, **pgAdmin** или консоль:
    ```bash
    psql -U postgres -d logistics_db -f Database/init_db.sql
+3. Укажите параметры подключения в файле appsettings.json:
+
+`"ConnectionStrings": {
+  "DefaultConnection": "Host=localhost;Port=5432;Database=logistics_db;Username=postgres;Password=ваш_пароль"
+}`
 
 ## Запуск сервера
 
